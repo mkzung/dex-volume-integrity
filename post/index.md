@@ -38,6 +38,8 @@ Three filters then decide what counts:
 2. **Contract-fleet check.** The trader recorded for a swap can be a smart contract (a router, an aggregator, or a Uniswap v4 pool manager) rather than a person's wallet. For every EVM pool the detector runs `eth_getCode` on each fleet wallet and keeps only externally-owned accounts; a pool needs at least two.
 3. **Direct on-chain full-day measurement.** The screen's fleet share comes from a roughly 300-trade window, which over-represents a fleet that trades in bursts. For the confirmed pools the fleet's real 24-hour USD volume is read directly from the chain (Bitquery on EVM, Helius on Solana). That on-chain figure, not the window extrapolation, is the reported fabricated volume, and the pool total measured this way agrees with DexScreener independently.
 
+Mapped to the DN market-health metric family: the balanced-flow test is `buysellratio` (count-based, buy trades over total) with `buysellratioabs` (volume-weighted), both near 0.5 for a wash fleet; the fleet's dominance of executed size is `volumedist`, summarised by the fleet's share of 24-hour volume rather than a fixed-bin histogram; the pool volume itself is `vwap`/`tradecount`, cross-checked between Bitquery and DexScreener. A first-digit test (`firstdigitdist`/`benfordlawtest`) is deliberately not used: low-cap trade sizes span too few orders of magnitude to track Benford, so at this sample size the test rejects even the organic control and cannot discriminate. The load-bearing signals here are concentration, near-zero inventory, and the funding graph.
+
 ## Findings
 
 ### The census
@@ -54,7 +56,7 @@ Of 73 screened pools, 10 flagged on mechanics and 9 were sustained. Three cleare
 
 ### Why a snapshot is not enough
 
-The screen flags on a short window of the trade tape. For fleets that trade in bursts, that window catches them mid-burst and overstates their share. The full 24-hour on-chain measurement corrects this (Figure 6). SOSO barely moves: its fleet is 98.9 percent of the pool over the whole day, exactly as the snapshot suggested. ULTIMA drops modestly. IN collapses: the snapshot implied about 2 million dollars a day, but over 24 hours the three identified wallets are only 9.3 percent of the pool, about 324,000 dollars. A fourth pool, PYTH on Solana, was rejected entirely: its snapshot implied 216,000 dollars, but the on-chain check (via Helius) found the wallets trade PYTH essentially not at all over a full day (206 dollars, 0.1 percent); they are generic multi-token bots that happened to be balanced in the sampled window.
+The screen flags on a short window of the trade tape. For fleets that trade in bursts, that window catches them mid-burst and overstates their share. The full 24-hour on-chain measurement corrects this (Figure 6). SOSO barely moves: its fleet is 98.9 percent of the pool over the whole day, just as the snapshot suggested. ULTIMA drops modestly. IN collapses: the snapshot implied about 2 million dollars a day, but over 24 hours the three identified wallets are only 9.3 percent of the pool, about 324,000 dollars. A fourth pool, PYTH on Solana, was rejected entirely: its snapshot implied 216,000 dollars, but the on-chain check (via Helius) found the wallets trade PYTH essentially not at all over a full day (206 dollars, 0.1 percent); they are generic multi-token bots that happened to be balanced in the sampled window.
 
 ![Sampled-window estimate versus direct on-chain measurement](fig6_window_vs_onchain.png)
 
@@ -68,11 +70,11 @@ Three pools flagged on mechanics were dropped because the independent source sho
 
 Two pools cleared the volume check but failed the contract check. DUAL/ETH on Base is a Uniswap v4 pool whose flagged fleet is nine smart contracts and a single externally-owned wallet; BASED/USDT on BNB Chain has one externally-owned wallet and one contract. Balanced flow routed through shared contracts cannot be separated from organic trading aggregated by a router, so both are dropped. This also corrects a tempting but wrong inference: the wallet that appears in both the BASED and ARX fleets is itself a contract, which is why it shows up across pools. It is shared infrastructure, not a shared operator.
 
-### Turnover beyond physical limits
+### A liquid control: concentration is the tell, not turnover
 
-Every confirmed pool trades far faster than its liquidity can organically support. A pool's daily volume divided by its liquidity rarely exceeds two or three for a normally traded asset; all three exceed five. IN/WBNB is the extreme: 3.5 million dollars of daily volume on 7,346 dollars of liquidity, a turnover of **481 times per day** across 78,233 transactions (Figure 3). Note the tension this creates with the attribution: the IN pool is unambiguously manipulated, yet the three identified wallets account for only 9 percent of its volume, so the manipulation there is broader than the fleet we can name.
+Turnover (a pool's daily volume divided by its liquidity) screens candidates but does not prove manipulation: liquid, legitimately-traded pools run high turnover too. Measured the same way over 24 hours, WETH/USDC on Base and USDT/WBNB on BNB Chain each turn over about seven times, both organic. What separates the flagged pools is concentration. In those two controls the ten largest traders hold only 28 and 26 percent of volume (the single largest, 7 and 3 percent). In SOSO the flagged fleet holds 98.9 percent of the pool and in ULTIMA 42 percent (Figure 3), far outside anything the controls show. IN is the honest exception: its three wallets are 9 percent of the pool, below the controls, so IN does not rest on concentration but on the pool's own impossibility, 3.5 million dollars a day cycling through 7,346 dollars of liquidity (a 481x turnover, 78,233 transactions) and on those three wallets' balanced, zero-inventory trading. The manipulation in the IN pool is clearly broader than the fleet we can name.
 
-![Turnover (daily volume / liquidity)](fig3_turnover.png)
+![Volume concentration: flagged fleets versus liquid controls](fig3_concentration.png)
 
 ### Wash trading, not market-making
 
@@ -106,9 +108,7 @@ The on-chain figure counts only the identified fleet; the IN pool in particular 
 
 ## Reproducibility
 
-Everything regenerates from the companion repository. `runner.py` screens, `aggregate.py` applies the volume and `eth_getCode` filters, `onchain_fullday.py` (Bitquery) and `helius_pyth.py` (Helius) measure the direct full-day on-chain fabricated volume, `net_inventory.py` checks holdings, `attribution.py` traces funding, and `verify.py` re-derives every number in this post from the committed data and exits non-zero on any mismatch. Dated DexScreener and trade-tape snapshots are included.
-
-Companion repository and exact commit are linked with this submission.
+Everything regenerates from the companion repository, which is pinned at a specific commit with this submission. Clone it, run `pip install -r requirements.txt`, then `python3 verify.py` to re-derive and assert every number in this post offline, and `python3 make_figures.py` to rebuild the figures. The collection scripts regenerate the data from the live sources: `runner.py` screens, `aggregate.py` applies the volume and `eth_getCode` filters, `onchain_fullday.py` (Bitquery) and `helius_pyth.py` (Helius) measure the direct full-day on-chain fabricated volume, `control_measure.py` measures the liquid controls, `net_inventory.py` checks holdings, and `attribution.py` traces funding. Dated DexScreener and trade-tape snapshots are included in the repository.
 
 ## References
 

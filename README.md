@@ -28,8 +28,10 @@ Three filters do the work, and each one removed something:
 
 Supporting evidence: the fleets hold almost no inventory versus what they trade (IN $0,
 SOSO $2,546 = 0.12%, ULTIMA $376 = 0.03% of daily volume): they cycle funds, not make
-markets. IN/WBNB reports 3.5M dollars/day on 7,346 dollars of liquidity (481x turnover);
-ULTIMA's fleet is one automated funding relay chain.
+markets. Against liquid controls measured the same way (WETH/USDC on Base, USDT/WBNB on
+BNB Chain), the top-10 traders hold only 26-28% of volume, versus 42% (ULTIMA) and 98.9%
+(SOSO) for the flagged fleets: concentration, not turnover, is the discriminator (liquid
+pools run 7-12x turnover organically). ULTIMA's fleet is one automated funding relay chain.
 
 ## Method
 
@@ -62,7 +64,7 @@ then `onchain_fullday.py`/`helius_pyth.py`, then `finalize_report.py`):
 
 ```bash
 python3 runner.py; python3 eoa_check.py; python3 aggregate.py
-python3 snapshot.py; python3 recheck_live.py; python3 net_inventory.py; python3 sample_windows.py
+python3 snapshot.py; python3 recheck_live.py; python3 net_inventory.py; python3 sample_windows.py; python3 control_measure.py
 python3 onchain_fullday.py; python3 helius_pyth.py; python3 finalize_report.py
 python3 attribution.py
 ```
@@ -76,14 +78,15 @@ aggregate.py         volume + contract filters (screen funnel, exclusions) -> da
 onchain_fullday.py   Bitquery: direct full-day on-chain fabricated volume (EVM)
 helius_pyth.py       Helius: same on-chain check for the Solana candidate
 net_inventory.py     fleet token holdings vs daily volume (wash vs market-making)
+control_measure.py   liquid control pools, same on-chain measure (top-trader concentration)
 sample_windows.py    multi-window fleet-share robustness
 finalize_report.py   assemble report.json from the on-chain measurements
 attribution.py       funding-graph tracer (relay/peel chains, hubs, reuse)
 verify.py            re-derive and assert every published number (CI entry point)
 data/                pools/scores/flagged_detail jsonl; screen.json (aggregate) ->
                      report.json (finalize, on-chain headline); eoa_check, onchain_fullday,
-                     pyth_onchain, net_inventory, window_robustness, dexscreener_snapshot,
-                     live_recheck, attribution json
+                     pyth_onchain, net_inventory, controls, window_robustness,
+                     dexscreener_snapshot, live_recheck, attribution json
 figures/             published figures
 post/                the market-health post as a page bundle (index.md + figures)
 .github/workflows/   CI running verify.py on every push

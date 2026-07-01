@@ -79,6 +79,15 @@ for c in report["confirmed_onchain"]:
     check(r["holdings_to_daily_volume"] < 0.02, f'{t}: holdings/volume {r["holdings_to_daily_volume"]} not << 1')
     print(f'  {t:7} holdings ${r["fleet_holdings_usd"]:,.0f} = {r["holdings_to_daily_volume"]*100:.2f}% of daily volume')
 
+print("== controls (liquid pools, same on-chain measure) ==")
+controls = jload("controls.json")
+maxctrl = max(c["top10_share"] for c in controls.values())
+conc = [c for c in report["confirmed_onchain"] if c["fleet_share_24h"] > maxctrl]
+check(len(conc) >= 2, f"expected >=2 flagged pools more concentrated than controls (max control top10 {maxctrl})")
+for name, c in controls.items():
+    check(0 < c["top10_share"] < 0.5, f'{name}: control top10 {c["top10_share"]} not organic (<0.5)')
+    print(f'  {name:18} top1={c["top1_share"]*100:.1f}% top10={c["top10_share"]*100:.1f}% (organic)')
+
 print("== exclusion gate 1: phantom volume ==")
 for e in report["excluded_uncorroborated"]:
     check(e["ds_daily"] < CORROBORATION_MIN and e["gt_daily"] > e["ds_daily"], f'{e["name"]}: phantom check')
@@ -126,6 +135,10 @@ if os.path.exists(ppath):
     check("481" in txt, "post missing IN turnover")
     check("eth_getCode" in txt or "smart contract" in txt, "post missing contract gate")
     check(("market-making" in txt) or ("market making" in txt), "post missing wash-vs-MM framing")
+    check("concentration" in txt.lower(), "post missing concentration framing")
+    for cn in ["WETH/USDC", "USDT/WBNB"]:
+        check(cn in txt, f"post missing control pool {cn}")
+    check("buysellratio" in txt, "post missing DN metric-mapping")
     print("  post ties: on-chain total, screen counts, per-pool on-chain $, exclusions, phantom, turnover, MM framing")
 
 if "--live" in sys.argv:

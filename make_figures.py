@@ -51,20 +51,21 @@ for i, e in enumerate(ex):
 ax.legend(frameon=False)
 plt.tight_layout(); plt.savefig(os.path.join(FIG, "fig2_phantom_vs_real.png"), dpi=150); plt.close()
 
-# Fig 3: turnover for confirmed pools
-cnames = {tok(c["name"]) for c in conf}
-order = sorted(((k, v) for k, v in snap.items() if k in cnames), key=lambda kv: kv[1]["turnover"])
-fig, ax = plt.subplots(figsize=(9, 4.4))
-bars = ax.barh([k for k, _ in order], [v["turnover"] for _, v in order], color=[CH.get(v["net"], "#888") for _, v in order])
-ax.set_xscale("log"); ax.axvline(3, color="#444", ls="--", lw=1)
-ax.text(3.2, 0.05, "typical organic ceiling ~2-3x", rotation=90, va="bottom", fontsize=8, color="#444")
-for b, (k, v) in zip(bars, order):
-    ax.text(b.get_width()*1.1, b.get_y()+b.get_height()/2,
-            f'{v["turnover"]:.0f}x  (\\${v["vol_h24"]/1e6:.2f}M on \\${v["liq_usd"]:,.0f} liq)', va="center", fontsize=9)
-ax.set_xlabel("Daily volume / liquidity (turnover), log scale")
-ax.set_title("Turnover far beyond organic limits; IN reports \\$3.5M/day on \\$7.3k liquidity (481x)", fontweight="bold")
-ax.set_xlim(1, max(v["turnover"] for _, v in order)*6)
-plt.tight_layout(); plt.savefig(os.path.join(FIG, "fig3_turnover.png"), dpi=150); plt.close()
+# Fig 3: volume concentration (flagged fleet share vs liquid control top-10 share)
+controls = json.load(open(os.path.join(DATA, "controls.json")))
+items = [(tok(c["name"]), c["fleet_share_24h"], CH.get(c["net"], "#888")) for c in conf]
+citems = [(name.split(" (")[0] + " (control)", v["top10_share"], "#a0aec0") for name, v in controls.items()]
+allit = sorted(items + citems, key=lambda x: x[1])
+fig, ax = plt.subplots(figsize=(9.5, 4.8))
+bars = ax.barh([a[0] for a in allit], [a[1]*100 for a in allit], color=[a[2] for a in allit])
+for b, a in zip(bars, allit):
+    ax.text(b.get_width()+1, b.get_y()+b.get_height()/2, f"{a[1]*100:.0f}%", va="center", fontsize=9)
+ax.set_xlabel("share of 24h pool volume held by the flagging wallet set  (controls: top-10 traders)")
+ax.set_title("Concentration is the discriminator: flagged fleets vs liquid controls", fontweight="bold")
+ax.set_xlim(0, 108)
+ax.legend(handles=[Patch(color=CH["base"], label="flagged (Base)"), Patch(color=CH["bsc"], label="flagged (BSC)"),
+                   Patch(color="#a0aec0", label="liquid control (top-10 traders)")], loc="lower right", frameon=False)
+plt.tight_layout(); plt.savefig(os.path.join(FIG, "fig3_concentration.png"), dpi=150); plt.close()
 
 # Fig 4: balanced two-sided flow (confirmed pools)
 pools = [tok(c["name"]) for c in conf]
