@@ -95,9 +95,9 @@ A legitimate market maker holds inventory to quote both sides; a wash fleet cycl
 
 The mechanics prove self-trading; the funding graph identifies coordination. Tracing native-token transfers upward from the BNB-Chain fleets gives two clear pictures:
 
-**ULTIMA is a single automated operator.** The eleven wallets are linked by one automated funding chain: each receives roughly 0.052 BNB and forwards to exactly one next wallet, on a fixed cadence of about eight minutes, with a small fixed per-hop decrement consistent with the forwarding-transaction fee. A chain in which every node has exactly one downstream recipient, on a regular timer, is not organic behaviour (Figure 5).
+**ULTIMA is a single automated operator.** The eleven wallets are linked by one automated funding chain: each receives roughly 0.052 BNB and forwards it to a single next wallet, on a fixed cadence of about eight minutes, with a small fixed per-hop decrement consistent with the forwarding-transaction fee. A chain in which every node has exactly one downstream recipient, on a regular timer, is not organic behaviour (Figure 5).
 
-{{< figure src="fig5_ultima_funding_chain.png" alt="ULTIMA automated funding relay chain" caption="ULTIMA's eleven wallets are fed by one automated relay chain: each hop forwards roughly 0.052 BNB to exactly one next wallet on a fixed ~8-minute cadence, with a small fixed decrement." loading="lazy" >}}
+{{< figure src="fig5_ultima_funding_chain.png" alt="ULTIMA automated funding relay chain" caption="ULTIMA's eleven wallets are fed by one automated relay chain: each hop forwards roughly 0.052 BNB to the next wallet on a fixed ~8-minute cadence, with a small fixed decrement." loading="lazy" >}}
 
 **IN traces to throwaway wallets.** Its fleet is funded through a short chain of throwaway externally-owned accounts (`0x50560acf...` funding `0x40068df75...` funding the fleet), each with only a couple of transactions.
 

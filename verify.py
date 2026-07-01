@@ -141,6 +141,10 @@ if os.path.exists(ppath):
         check(tok(e["name"]) in txt, f'post missing excluded pool {tok(e["name"])}')
     check(f'{max(e["gt_daily"] for e in report["excluded_uncorroborated"]):,}' in txt, "post missing largest phantom")
     check("481" in txt, "post missing IN turnover")
+    insnap = snap["IN"]  # IN impossibility figures are hand-typed from the DexScreener snapshot; assert against source
+    check(f'{int(insnap["liq_usd"]):,}' in txt, "post missing IN liquidity (DexScreener snapshot)")
+    check(f'{insnap["txns_h24"]:,}' in txt, "post missing IN txn count (DexScreener snapshot)")
+    check(str(round(insnap["vol_h24"] / insnap["liq_usd"])) in txt, "post IN turnover != DexScreener vol/liq")
     check("eth_getCode" in txt or "smart contract" in txt, "post missing contract gate")
     check(("market-making" in txt) or ("market making" in txt), "post missing wash-vs-MM framing")
     check("concentration" in txt.lower(), "post missing concentration framing")
