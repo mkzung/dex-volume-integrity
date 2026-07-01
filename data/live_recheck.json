@@ -1,0 +1,81 @@
+{
+ "SOSO": {
+  "net": "base",
+  "addr": "0x29183f918920a2aef0115a9c7374945589968aea",
+  "live_trades": 300,
+  "fleet_in_top": 12,
+  "live_fleet_share": 0.987,
+  "receipts": [
+   [
+    "0x3d42f45c91279337d6a0fe76a16889288fc767b6",
+    "0x64b49d3eae370472a16b94ef3569d15c7a078b95a83425cf3f4675836edcc65c"
+   ],
+   [
+    "0x514517e8a393cfd317b1a7a7b0f7edacaa49df68",
+    "0xeefcc818c01e1730d2a7edd6b4eda2c9e961e8fcde5d41bd52991cb8c104bb68"
+   ],
+   [
+    "0x04f2be14a4a1267ad7f0b4ba755429df79db22f1",
+    "0xc56e8bcb54565b65e035d0f614ef4a436a9fbffff56fd07d2c9c900f3d6cce3a"
+   ],
+   [
+    "0x85164eb90b7582307299d08f090c165f71e1c6c6",
+    "0x437333d686c823cc369e91eac06ced3c62d6c8e3ea58529eff81001567a04b51"
+   ],
+   [
+    "0xf394548fe1500a7a0a7aaefed3f1de674af260e6",
+    "0x04697fa1eef40a11930da1606382802c858255433d1242cc237c6d26eff86fb6"
+   ]
+  ]
+ },
+ "IN": {
+  "net": "bsc",
+  "addr": "0xc4dc171d499b3f5340bffed8433bddcec8d33b04",
+  "live_trades": 300,
+  "fleet_in_top": 3,
+  "live_fleet_share": 0.833,
+  "receipts": [
+   [
+    "0x7afab4299d2a85559ab9e2ef76e3d64820f7195b",
+    "0x7a5dad5f732d0b6448e0c38245ae95cdf8546b5ee4987e459d066043f13aa968"
+   ],
+   [
+    "0xc86dc6285370a8ce053f15a9e19a3ba23e001172",
+    "0x6467f6c800200ed7b39b604db273186fd48cdd5bc7ae4ea7d966a70f6b70a812"
+   ],
+   [
+    "0xc3f5edd05a3ed1072e75c05720d910c56db8fd1d",
+    "0x5886d28766af6f13bcefe5a4b2ee92ba8aa2d192a83842513d45d13806298207"
+   ]
+  ]
+ },
+ "ULTIMA": {
+  "net": "bsc",
+  "addr": "0xdc85c2bb53d927006b2db488a0cb4605fca48032",
+  "live_trades": 300,
+  "fleet_in_top": 8,
+  "live_fleet_share": 0.2,
+  "receipts": [
+   [
+    "0x5d07fa4c3d99477a9c1eb0b7846e6e2718e98cc0",
+    "0x9171048af6749506d0699e7feca34364e11e69bb93a2ade88ad1cd417d410844"
+   ],
+   [
+    "0x6fc723fd6b4a3ce6787d57002e37425f27fc591a",
+    "0x98664d2afa758e8be2ac364798a30d1427b84817e9da65534abc4a6c3f10ff10"
+   ],
+   [
+    "0xc2370231165197feb1908a5efde1b85a97fe79bb",
+    "0xe60af344168898524e496780c815a19d9ba4bb0ac5c4f8ad1c5364e126a83c2f"
+   ],
+   [
+    "0x52f5332b350b20c412ab3c21bce83e6121650617",
+    "0xd284d1b1c7016a64a3b529b0e4b4f0858793339a693c842ff6ca3b2f84b4088f"
+   ],
+   [
+    "0x0efcd1f41d44fe68f7f83355cf041e705d4fa99d",
+    "0xb8721fe4473b558661cd93954d368a96f6f78b602717343ec45e16a37d27b956"
+   ]
+  ]
+ }
+}

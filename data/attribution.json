@@ -1,0 +1,129 @@
+{
+ "fleets": {
+  "quq": [
+   "0x04da8e415ef1659a0b98d80f9b7d76287fdfd872",
+   "0x072e9c0605d5a0df4d8c1eaff8da9bfac91ea368",
+   "0x189adb290490c509a833dfb7e8f41ccae4f35185",
+   "0x30e0091df6b16b668c859067f8f347930a8983d0",
+   "0x57c5115fe9f1cffdf0607a9b9beefa56a9125870",
+   "0x591dc14b5cd66c104bdeb17d5e2bc844ca3179ca",
+   "0x64e5db1f6f0a1af57f46d8c11861b7fa4a772ea5",
+   "0x67ce65ec2e529e8cd9e73aad0e8c79efcf7b8bc8",
+   "0x6b127233c138322a2d6869373d8089aa88458614",
+   "0x6c9d96942e4dc17d558e13ce679d197ea9b579f1",
+   "0x8035b3abc772d8f21d0c66a224f19e81585378ea",
+   "0x86cc447637d22607864fd4ea10a044e52e77a9c6",
+   "0x8e7e4f05cc4430a923347ce4dab06386e5a927ad",
+   "0x9c4bd019cf2f4ce5945afa82b807e412b820acfd",
+   "0x9d4c1c9e1f850f22e5940b8385aa5a580798e5de",
+   "0xa43ebbaa4a59608a2cafad4fe70ccc3a3b0c2ff4",
+   "0xac7ca4b036b55399cc8a4826347750bb29b3e9fe",
+   "0xc2f1d02a87ef8b7fc2ee3ef45079bca626f6c766",
+   "0xcd76f3913ff6292c169f0e150893e0239dc59d4f",
+   "0xd2c77f8c3bd62fc9ac4799771cf6a7a208125caa",
+   "0xdb034a1485da0300175b07282f5a84af69c2493e",
+   "0xe183046d261a854ebff6a16cd1b3887c31cf8e79",
+   "0xe5fbd90e138cc23f41c2fa5e3a0269797e71686f",
+   "0xe7538bfa89e46ce0a00b49d6724821e9806c5bf8",
+   "0xee31b921fa570806e98b3c0a3f3acc58a87a3833",
+   "0xf5ce806241c164b173964fa8beeee94311303195"
+  ],
+  "ULTIMA": [
+   "0x035380fc83f020468529bf0e28a19f5938a65b84",
+   "0x0efcd1f41d44fe68f7f83355cf041e705d4fa99d",
+   "0x13506f1729cbf84dd2bd8e8f5b3f1aefb68eed06",
+   "0x1945f590a45d3bbfb092b35f56fd008df8b21b8e",
+   "0x51172caf01de95d2b562a205183696e6258d8d72",
+   "0x52f5332b350b20c412ab3c21bce83e6121650617",
+   "0x56132f29a507dddfe17b7c84cc845d161624208b",
+   "0x5d07fa4c3d99477a9c1eb0b7846e6e2718e98cc0",
+   "0x6fc723fd6b4a3ce6787d57002e37425f27fc591a",
+   "0xc2370231165197feb1908a5efde1b85a97fe79bb",
+   "0xf5a79be1d3c364718f4d0bb55bb0dc3df53ec2b3"
+  ],
+  "BASED": [
+   "0x9999b0cdd35d7f3b281ba02efc0d228486940515",
+   "0xdb8eabf2876b976cd86fc7c6a6fdd8a3ab4152e3"
+  ],
+  "IN": [
+   "0x7afab4299d2a85559ab9e2ef76e3d64820f7195b",
+   "0xc3f5edd05a3ed1072e75c05720d910c56db8fd1d",
+   "0xc86dc6285370a8ce053f15a9e19a3ba23e001172"
+  ],
+  "ARX": [
+   "0x0120c7c5dd2726cc3451863f99a08103c7e392dc",
+   "0x4187f3e6c6af32297390cfb8b45b996313b6f46b",
+   "0x4979d0f109f2ebff3f488c89ea42499a6310aa30",
+   "0x5718c51aaac828f5ed0da8e32c3a65bba27be0ce",
+   "0x6d9278e37df1cf8057b44dc5c16d42d003cfa7f0",
+   "0x91b5b0f9580549ff31f25ee16c0fc4d8a23e1919",
+   "0x9999b0cdd35d7f3b281ba02efc0d228486940515",
+   "0xcba73023622620e9468caf77c8524d0ec8cdd588",
+   "0xce250cf186d640c65bf04bdd6720e3f0299e09df",
+   "0xe22c62fb96cd01083022aaa48a608c4378d76247",
+   "0xe5abba7db2e6b4f17b8e8e3ce61955a219594357",
+   "0xfd15484d86f1d37de78f60b0d05c02b9941515ce"
+  ]
+ },
+ "traces": {
+  "ULTIMA": {
+   "fleet_size": 11,
+   "sample_funder": "0x5d07fa4c3d99477a9c1eb0b7846e6e2718e98cc0",
+   "chain_from_last_relay": [
+    [
+     "0xf5a79be1d3c364718f4d0bb55bb0dc3df53ec2b3",
+     186,
+     1
+    ],
+    [
+     "0x0efcd1f41d44fe68f7f83355cf041e705d4fa99d",
+     186,
+     1
+    ],
+    [
+     "0xc2370231165197feb1908a5efde1b85a97fe79bb",
+     187,
+     1
+    ],
+    [
+     "0x6fc723fd6b4a3ce6787d57002e37425f27fc591a",
+     187,
+     1
+    ],
+    [
+     "0x035380fc83f020468529bf0e28a19f5938a65b84",
+     187,
+     1
+    ]
+   ]
+  },
+  "IN": {
+   "funders": {
+    "0x7afab4299d2a85559ab9e2ef76e3d64820f7195b": null,
+    "0xc3f5edd05a3ed1072e75c05720d910c56db8fd1d": null,
+    "0xc86dc6285370a8ce053f15a9e19a3ba23e001172": null
+   },
+   "chain_up": [],
+   "funders_verified": {
+    "0xc3f5edd05a3ed1072e75c05720d910c56db8fd1d": "0x40068df75e2b5a779c50d3ce7156e5b5de953c1a"
+   },
+   "chain_up_verified": [
+    "0x40068df75e2b5a779c50d3ce7156e5b5de953c1a",
+    "0x50560acf3bb31ceafa26eeb51ff279b59aaa8f99"
+   ]
+  },
+  "BASED": {
+   "native_src": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c (WBNB contract; unwrap, not a funder)"
+  }
+ },
+ "cross": {
+  "wallet_reuse": {
+   "0x9999b0cdd35d7f3b281ba02efc0d228486940515": [
+    "ARX",
+    "BASED"
+   ]
+  },
+  "IN_intersect_ULTIMA": []
+ },
+ "note": "wallet_reuse and IN_intersect_ULTIMA are computed offline/deterministically. Per-wallet funder lookups via the free Bitquery tier are rate-limited and may return null on a given run; the verified IN funding chain (0x50560acf -> 0x40068df75 -> fleet 0xc3f5edd) is preserved here and in deep_attrib.json."
+}

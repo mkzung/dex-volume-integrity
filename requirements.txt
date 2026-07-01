@@ -1,0 +1,3 @@
+# Screen, aggregation, verification, and attribution use only the Python standard
+# library plus curl (called via subprocess). Figures require matplotlib.
+matplotlib>=3.5

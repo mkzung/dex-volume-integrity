@@ -1,0 +1,17 @@
+{
+ "in_funders": [
+  "0x40068df75e2b5a779c50d3ce7156e5b5de953c1a",
+  null
+ ],
+ "based_funders": [
+  "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+  null
+ ],
+ "in_path": [
+  "0x40068df75e2b5a779c50d3ce7156e5b5de953c1a",
+  "0x50560acf3bb31ceafa26eeb51ff279b59aaa8f99"
+ ],
+ "based_path": [
+  "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
+ ]
+}

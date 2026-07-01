@@ -1,0 +1,71 @@
+{
+ "captured_utc": "2026-07-01T10:56:53Z",
+ "pools": {
+  "SOSO": {
+   "net": "base",
+   "addr": "0x29183f918920a2aef0115a9c7374945589968aea",
+   "symbol": "SOSO",
+   "quote": "USDC",
+   "dex": "uniswap",
+   "vol_h24": 2057523.96,
+   "liq_usd": 251494.15,
+   "txns_h24": 13561,
+   "turnover": 8.2
+  },
+  "IN": {
+   "net": "bsc",
+   "addr": "0xc4dc171d499b3f5340bffed8433bddcec8d33b04",
+   "symbol": "IN",
+   "quote": "WBNB",
+   "dex": "pancakeswap",
+   "vol_h24": 3533961.42,
+   "liq_usd": 7346.34,
+   "txns_h24": 78233,
+   "turnover": 481.1
+  },
+  "ULTIMA": {
+   "net": "bsc",
+   "addr": "0xdc85c2bb53d927006b2db488a0cb4605fca48032",
+   "symbol": "ULTIMA",
+   "quote": "USDT",
+   "dex": "uniswap",
+   "vol_h24": 1272221.67,
+   "liq_usd": 237134.76,
+   "txns_h24": 6456,
+   "turnover": 5.4
+  },
+  "DUAL": {
+   "net": "base",
+   "addr": "0xdc5a40b5be693afb1864c558da73e7d51b70579e53689cb3a41f85e6cdd6a7f6",
+   "symbol": "DUAL",
+   "quote": "ETH",
+   "dex": "uniswap",
+   "vol_h24": 370765.83,
+   "liq_usd": 25922.54,
+   "txns_h24": 24606,
+   "turnover": 14.3
+  },
+  "BASED": {
+   "net": "bsc",
+   "addr": "0x07b7556ede0f9a6a7d155a78bc0573f531001a57",
+   "symbol": "BASED",
+   "quote": "USDT",
+   "dex": "uniswap",
+   "vol_h24": 703699.86,
+   "liq_usd": 109348.08,
+   "txns_h24": 7817,
+   "turnover": 6.4
+  },
+  "PYTH": {
+   "net": "solana",
+   "addr": "8erNF5u3CHrqZJXtkfY8CjSxFYF1yqHmN8uDbAhk6tWM",
+   "symbol": "PYTH",
+   "quote": "SOL",
+   "dex": "orca",
+   "vol_h24": 377694.1,
+   "liq_usd": 25188.45,
+   "txns_h24": 31881,
+   "turnover": 15.0
+  }
+ }
+}

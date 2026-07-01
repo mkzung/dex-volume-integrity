@@ -1,0 +1,13 @@
+# secrets - never commit
+.secrets.env
+*.key
+
+# python
+__pycache__/
+*.pyc
+
+# local run artifacts
+run.log
+data/run_cursor.json
+_scratch/
+.DS_Store
