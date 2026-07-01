@@ -95,7 +95,7 @@ report = dict(candidates_screened=scored, flagged_by_mechanics=flagged_screen,
                eoa_status=r["eoa_status"], fleet_vol_share=r["fleet_vol_share"],
                active_days=(r.get("ohlcv") or {}).get("active_days"), ds_daily=r["ds_daily"],
                manuf_verified=r["manuf_verified"], addr=r["addr"]) for r in sorted(confirmed, key=lambda x:-x["manuf_verified"])])
-json.dump(report, open(os.path.join(HERE, "data", "report.json"), "w"), indent=1)
+json.dump(report, open(os.path.join(HERE, "data", "screen.json"), "w"), indent=1)  # screen layer; finalize_report.py builds the on-chain report.json from this
 
 print("=== Fabricated DEX volume - VERIFIED (cross-sourced + eth_getCode gated) ===")
 print(f"candidates screened: {scored} | flagged by mechanics: {flagged_screen} | sustained (>=7d): {len(sustained)}")

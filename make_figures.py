@@ -71,12 +71,12 @@ pools = [tok(c["name"]) for c in conf]
 buys = [sum(a[1] for a in det[tok(c["name"])]["wallets"]) for c in conf]
 sells = [sum(a[2] for a in det[tok(c["name"])]["wallets"]) for c in conf]
 x = range(len(pools)); wd = 0.4
-fig, ax = plt.subplots(figsize=(8, 4.6))
+fig, ax = plt.subplots(figsize=(10, 4.6))
 ax.bar([i-wd/2 for i in x], buys, wd, label="fleet buys", color="#3182ce")
 ax.bar([i+wd/2 for i in x], sells, wd, label="fleet sells", color="#dd6b20")
 ax.set_xticks(list(x)); ax.set_xticklabels(pools)
 ax.set_ylabel("trades in sampled tape (last ~300)")
-ax.set_title("Fleet flow is balanced buy vs sell (net accumulation ~ 0): the wash signature", fontweight="bold")
+ax.set_title("Fleet flow is balanced buy vs sell (net accumulation ~ 0): the wash signature", fontweight="bold", fontsize=11)
 ax.legend(frameon=False)
 plt.tight_layout(); plt.savefig(os.path.join(FIG, "fig4_fleet_balance.png"), dpi=150); plt.close()
 

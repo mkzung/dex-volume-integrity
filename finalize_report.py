@@ -5,7 +5,7 @@ comparison. PYTH is moved to a window-artifact exclusion (on-chain full-day flee
 Deterministic, offline, from committed data."""
 import json, os, collections
 HERE = os.path.dirname(os.path.abspath(__file__)); DATA = os.path.join(HERE, "data")
-rep = json.load(open(os.path.join(DATA, "report.json")))
+rep = json.load(open(os.path.join(DATA, "screen.json")))  # screen layer from aggregate.py (never overwrite report.json's own inputs)
 oc = json.load(open(os.path.join(DATA, "onchain_fullday.json")))
 pyth = json.load(open(os.path.join(DATA, "pyth_onchain.json")))
 worst = {w["name"].split("/")[0].strip(): w for w in rep["worst"]}

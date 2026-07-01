@@ -19,7 +19,7 @@ The filters carry the argument. First, the loudest reported numbers are fictiona
 
 ## Data and scope
 
-Four public sources, none requiring a paid tier:
+Public sources, none requiring a paid tier:
 
 - **GeckoTerminal** for the pool universe and the per-trade tape (trader address, side, USD size, transaction hash, timestamp).
 - **DexScreener** as an independent second measurement of each pool's daily volume and liquidity.
@@ -82,7 +82,7 @@ A legitimate market maker holds inventory to quote both sides; a wash fleet cycl
 
 **SOSO / USDC (Base, Uniswap).** Eleven externally-owned wallets (a twelfth sampled trader is a contract, dropped) that are **98.9 percent of the pool's on-chain volume over 24 hours** and hold near-zero inventory. This is the cleanest case. Example fleet transaction: `0x64b49d3eae370472a16b94ef3569d15c7a078b95a83425cf3f4675836edcc65c` (wallet `0x3d42f45c91279337d6a0fe76a16889288fc767b6`).
 
-**ULTIMA / USDT (BNB Chain, Uniswap).** Eleven externally-owned wallets, 42 percent of the pool over 24 hours, each executing an almost identical count of trades per day (about 233), a mechanical uniformity no organic trader shows. What makes ULTIMA the clearest attribution case is its funding, below.
+**ULTIMA / USDT (BNB Chain, Uniswap).** Eleven externally-owned wallets, 42 percent of the pool over 24 hours, each executing an almost identical number of trades per day, a mechanical uniformity no organic trader shows. What makes ULTIMA the clearest attribution case is its funding, below.
 
 **IN / WBNB (BNB Chain, PancakeSwap).** An anomalous pool (481x turnover) where three wallets (`0xc86dc628...`, `0xc3f5edd0...`, `0x7afab429...`) account for 9.3 percent of full-day volume, about 324,000 dollars, and hold zero inventory. Example transaction: `0x6467f6c800200ed7b39b604db273186fd48cdd5bc7ae4ea7d966a70f6b70a812`.
 

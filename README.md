@@ -72,7 +72,7 @@ python3 attribution.py
 ```
 runner.py            screen + lockstep-bot detector (crawl/score, resumable)
 eoa_check.py         eth_getCode: per-wallet EOA vs contract
-aggregate.py         volume + contract filters (screen funnel, exclusions)
+aggregate.py         volume + contract filters (screen funnel, exclusions) -> data/screen.json
 onchain_fullday.py   Bitquery: direct full-day on-chain fabricated volume (EVM)
 helius_pyth.py       Helius: same on-chain check for the Solana candidate
 net_inventory.py     fleet token holdings vs daily volume (wash vs market-making)
@@ -80,9 +80,10 @@ sample_windows.py    multi-window fleet-share robustness
 finalize_report.py   assemble report.json from the on-chain measurements
 attribution.py       funding-graph tracer (relay/peel chains, hubs, reuse)
 verify.py            re-derive and assert every published number (CI entry point)
-data/                pools/scores/flagged_detail jsonl; report.json; eoa_check,
-                     onchain_fullday, pyth_onchain, net_inventory, window_robustness,
-                     dexscreener_snapshot, live_recheck, attribution json
+data/                pools/scores/flagged_detail jsonl; screen.json (aggregate) ->
+                     report.json (finalize, on-chain headline); eoa_check, onchain_fullday,
+                     pyth_onchain, net_inventory, window_robustness, dexscreener_snapshot,
+                     live_recheck, attribution json
 figures/             published figures
 post/                the market-health post as a page bundle (index.md + figures)
 .github/workflows/   CI running verify.py on every push
