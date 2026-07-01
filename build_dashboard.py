@@ -87,7 +87,7 @@ code{{background:#edf2f7;padding:1px 5px;border-radius:4px;font-size:12px}}
 <canvas id=fab height=120></canvas>
 
 <h2>Concentration is the discriminator, not turnover</h2>
-<p class=sub>Liquid controls run high turnover too (WETH/USDC {controls['WETH/USDC (Base)']['turnover']}x, USDT/WBNB {controls['USDT/WBNB (BSC)']['turnover']}x), but their top-10 traders hold only 26-28% of volume, versus the flagged fleets below.</p>
+<p class=sub>Liquid controls run high turnover too (WETH/USDC {controls['WETH/USDC (Base)']['turnover']}x, USDT/WBNB {controls['USDT/WBNB (BSC)']['turnover']}x), but their top-10 traders hold only 26-28% of volume. SOSO and ULTIMA sit far above; IN, the weakest case, sits below and rests on other signals.</p>
 <canvas id=conc height=150></canvas>
 
 <h2>Why full-day on-chain, not a snapshot</h2>
