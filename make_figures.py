@@ -1,14 +1,15 @@
 """Generate publication figures for the post from committed data files (offline).
 Reads data/report.json, data/dexscreener_snapshot.json, data/flagged_detail.jsonl,
 data/live_recheck.json. Writes figures/*.png."""
-import json, os, collections
+import json, os, collections, shutil
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 
 HERE = os.path.dirname(os.path.abspath(__file__)); DATA = os.path.join(HERE, "data"); FIG = os.path.join(HERE, "figures")
-os.makedirs(FIG, exist_ok=True)
+POST = os.path.join(HERE, "post")
+os.makedirs(FIG, exist_ok=True); os.makedirs(POST, exist_ok=True)
 report = json.load(open(os.path.join(DATA, "report.json")))
 snap = json.load(open(os.path.join(DATA, "dexscreener_snapshot.json")))["pools"]
 live = json.load(open(os.path.join(DATA, "live_recheck.json")))
@@ -30,7 +31,7 @@ for b, x in zip(bars, w):
     ax.text(b.get_width()+0.03, b.get_y()+b.get_height()/2,
             f'${x["manuf_verified"]/1e6:.2f}M  ({x["net"]}, {x["fleet"]} wallets)', va="center", fontsize=9)
 ax.set_xlabel("Fabricated volume, $M / day  (fleet volume-share x independent DexScreener daily volume)")
-ax.set_title(f'Corroborated fabricated DEX volume: ${report["total_corroborated_manuf_per_day"]/1e6:.2f}M/day across 6 pools',
+ax.set_title(f'Confirmed fabricated DEX volume: ${report["total_confirmed_manuf_per_day"]/1e6:.2f}M/day across {len(w)} pools',
              fontweight="bold")
 ax.set_xlim(0, max(vals)*1.35)
 from matplotlib.patches import Patch
@@ -56,8 +57,9 @@ for i, e in enumerate(ex):
 ax.legend(frameon=False)
 plt.tight_layout(); plt.savefig(os.path.join(FIG, "fig2_phantom_vs_real.png"), dpi=150); plt.close()
 
-# ---- Fig 3: turnover (volume / liquidity) impossibility ----
-order = sorted(snap.items(), key=lambda kv: kv[1]["turnover"])
+# ---- Fig 3: turnover (volume / liquidity) impossibility (confirmed pools only) ----
+confirmed_names = {tok(x["name"]) for x in report["worst"]}
+order = sorted(((k, v) for k, v in snap.items() if k in confirmed_names), key=lambda kv: kv[1]["turnover"])
 names = [k for k, _ in order]; turns = [v["turnover"] for _, v in order]; cols = [CH.get(v["net"], "#888") for _, v in order]
 fig, ax = plt.subplots(figsize=(9, 5))
 bars = ax.barh(names, turns, color=cols)
@@ -99,10 +101,14 @@ for i, (nx, lab) in enumerate(zip(xs, nodes)):
     ax.add_patch(box); ax.text(nx, 1.6, lab, ha="center", va="center", fontsize=8.5, color=tc)
     if i < len(xs)-1:
         ax.add_patch(FancyArrowPatch((nx+0.58, 1.6), (xs[i+1]-0.58, 1.6), arrowstyle="-|>", mutation_scale=13, color="#444"))
-ax.text(5.0, 2.55, "ULTIMA (BSC): 11 wallets, one closed automated relay chain", ha="center", fontweight="bold", fontsize=11)
+ax.text(5.0, 2.55, "ULTIMA (BSC): 11 wallets, one automated funding relay chain", ha="center", fontweight="bold", fontsize=11)
 ax.text(5.0, 0.65, "each hop forwards ~0.052 BNB to exactly one next wallet, on a fixed ~8-minute cadence,\n"
-                   "with a fixed per-hop decrement equal to the forwarding-transaction gas",
+                   "with a small fixed per-hop decrement (the forwarding-transaction fee)",
         ha="center", va="center", fontsize=9, color="#333")
 plt.tight_layout(); plt.savefig(os.path.join(FIG, "fig5_ultima_funding_chain.png"), dpi=150); plt.close()
 
-print("wrote 5 figures to figures/:", sorted(os.listdir(FIG)))
+# mirror figures into the post page bundle so post/index.md renders standalone
+# (on GitHub) and drops straight into the DN wiki as a Hugo page bundle.
+for f in os.listdir(FIG):
+    if f.endswith(".png"): shutil.copy(os.path.join(FIG, f), os.path.join(POST, f))
+print("wrote 5 figures to figures/ and mirrored into post/:", sorted(x for x in os.listdir(FIG) if x.endswith(".png")))

@@ -1,0 +1,310 @@
+{
+ "quq / USDT 0.002%": {
+  "net": "bsc",
+  "codes": {
+   "EOA": 12
+  },
+  "wallets": [
+   [
+    "0x64e5db1f6f0a1af57f46d8c11861b7fa4a772ea5",
+    "EOA"
+   ],
+   [
+    "0x9d4c1c9e1f850f22e5940b8385aa5a580798e5de",
+    "EOA"
+   ],
+   [
+    "0x30e0091df6b16b668c859067f8f347930a8983d0",
+    "EOA"
+   ],
+   [
+    "0xdb034a1485da0300175b07282f5a84af69c2493e",
+    "EOA"
+   ],
+   [
+    "0xa43ebbaa4a59608a2cafad4fe70ccc3a3b0c2ff4",
+    "EOA"
+   ],
+   [
+    "0x8035b3abc772d8f21d0c66a224f19e81585378ea",
+    "EOA"
+   ],
+   [
+    "0xee31b921fa570806e98b3c0a3f3acc58a87a3833",
+    "EOA"
+   ],
+   [
+    "0x04da8e415ef1659a0b98d80f9b7d76287fdfd872",
+    "EOA"
+   ],
+   [
+    "0x189adb290490c509a833dfb7e8f41ccae4f35185",
+    "EOA"
+   ],
+   [
+    "0xc2f1d02a87ef8b7fc2ee3ef45079bca626f6c766",
+    "EOA"
+   ],
+   [
+    "0xd2c77f8c3bd62fc9ac4799771cf6a7a208125caa",
+    "EOA"
+   ],
+   [
+    "0x6b127233c138322a2d6869373d8089aa88458614",
+    "EOA"
+   ]
+  ]
+ },
+ "DUAL / ETH 0.01%": {
+  "net": "base",
+  "codes": {
+   "CONTRACT": 9,
+   "EOA": 1
+  },
+  "wallets": [
+   [
+    "0x6d688e6fd0037a3ba49947a9fde32c018e5874a2",
+    "CONTRACT"
+   ],
+   [
+    "0x80ad67863375ae13dd9e0cec083e12a885335fbc",
+    "CONTRACT"
+   ],
+   [
+    "0x757d611f9daedb6395d660cb05a1e34a50590f95",
+    "CONTRACT"
+   ],
+   [
+    "0x2433d22f559cfeed4f97c89265178ed792159d77",
+    "CONTRACT"
+   ],
+   [
+    "0x7d67574409356a159dd3532f8177ebfd13daaace",
+    "CONTRACT"
+   ],
+   [
+    "0x8fafd3f9685a149f2e4e34cec870e3085f6d15ae",
+    "EOA"
+   ],
+   [
+    "0xd5e8366bc7c43f1cc44a769d5919d3f490663f5e",
+    "CONTRACT"
+   ],
+   [
+    "0x106bed153816dcca3a302361b284f9e9a02fc5db",
+    "CONTRACT"
+   ],
+   [
+    "0x175186c07a707a3c45d4cff8340dc13cc2677589",
+    "CONTRACT"
+   ],
+   [
+    "0x626fe5e91584d75733f60fcf9ac58142eeddd6cf",
+    "CONTRACT"
+   ]
+  ]
+ },
+ "ULTIMA / USDT 0.01%": {
+  "net": "bsc",
+  "codes": {
+   "EOA": 11
+  },
+  "wallets": [
+   [
+    "0x5d07fa4c3d99477a9c1eb0b7846e6e2718e98cc0",
+    "EOA"
+   ],
+   [
+    "0x51172caf01de95d2b562a205183696e6258d8d72",
+    "EOA"
+   ],
+   [
+    "0x1945f590a45d3bbfb092b35f56fd008df8b21b8e",
+    "EOA"
+   ],
+   [
+    "0x56132f29a507dddfe17b7c84cc845d161624208b",
+    "EOA"
+   ],
+   [
+    "0x13506f1729cbf84dd2bd8e8f5b3f1aefb68eed06",
+    "EOA"
+   ],
+   [
+    "0x52f5332b350b20c412ab3c21bce83e6121650617",
+    "EOA"
+   ],
+   [
+    "0xf5a79be1d3c364718f4d0bb55bb0dc3df53ec2b3",
+    "EOA"
+   ],
+   [
+    "0x0efcd1f41d44fe68f7f83355cf041e705d4fa99d",
+    "EOA"
+   ],
+   [
+    "0xc2370231165197feb1908a5efde1b85a97fe79bb",
+    "EOA"
+   ],
+   [
+    "0x6fc723fd6b4a3ce6787d57002e37425f27fc591a",
+    "EOA"
+   ],
+   [
+    "0x035380fc83f020468529bf0e28a19f5938a65b84",
+    "EOA"
+   ]
+  ]
+ },
+ "BASED / USDT 0.3%": {
+  "net": "bsc",
+  "codes": {
+   "EOA": 1,
+   "CONTRACT": 1
+  },
+  "wallets": [
+   [
+    "0xdb8eabf2876b976cd86fc7c6a6fdd8a3ab4152e3",
+    "EOA"
+   ],
+   [
+    "0x9999b0cdd35d7f3b281ba02efc0d228486940515",
+    "CONTRACT"
+   ]
+  ]
+ },
+ "IN / WBNB 0.01%": {
+  "net": "bsc",
+  "codes": {
+   "EOA": 3
+  },
+  "wallets": [
+   [
+    "0xc86dc6285370a8ce053f15a9e19a3ba23e001172",
+    "EOA"
+   ],
+   [
+    "0xc3f5edd05a3ed1072e75c05720d910c56db8fd1d",
+    "EOA"
+   ],
+   [
+    "0x7afab4299d2a85559ab9e2ef76e3d64820f7195b",
+    "EOA"
+   ]
+  ]
+ },
+ "ARX / USDT 0.007%": {
+  "net": "bsc",
+  "codes": {
+   "CONTRACT": 1,
+   "EOA": 11
+  },
+  "wallets": [
+   [
+    "0x9999b0cdd35d7f3b281ba02efc0d228486940515",
+    "CONTRACT"
+   ],
+   [
+    "0x0120c7c5dd2726cc3451863f99a08103c7e392dc",
+    "EOA"
+   ],
+   [
+    "0xfd15484d86f1d37de78f60b0d05c02b9941515ce",
+    "EOA"
+   ],
+   [
+    "0xe5abba7db2e6b4f17b8e8e3ce61955a219594357",
+    "EOA"
+   ],
+   [
+    "0x6d9278e37df1cf8057b44dc5c16d42d003cfa7f0",
+    "EOA"
+   ],
+   [
+    "0x5718c51aaac828f5ed0da8e32c3a65bba27be0ce",
+    "EOA"
+   ],
+   [
+    "0xcba73023622620e9468caf77c8524d0ec8cdd588",
+    "EOA"
+   ],
+   [
+    "0x4187f3e6c6af32297390cfb8b45b996313b6f46b",
+    "EOA"
+   ],
+   [
+    "0xce250cf186d640c65bf04bdd6720e3f0299e09df",
+    "EOA"
+   ],
+   [
+    "0x91b5b0f9580549ff31f25ee16c0fc4d8a23e1919",
+    "EOA"
+   ],
+   [
+    "0xe22c62fb96cd01083022aaa48a608c4378d76247",
+    "EOA"
+   ],
+   [
+    "0x4979d0f109f2ebff3f488c89ea42499a6310aa30",
+    "EOA"
+   ]
+  ]
+ },
+ "SOSO / USDC 0.01%": {
+  "net": "base",
+  "codes": {
+   "EOA": 11,
+   "CONTRACT": 1
+  },
+  "wallets": [
+   [
+    "0x7d9361b6926830f500da3621ad39187b6b19dfc2",
+    "EOA"
+   ],
+   [
+    "0xf394548fe1500a7a0a7aaefed3f1de674af260e6",
+    "EOA"
+   ],
+   [
+    "0x0bb3caf2b320a201cc6412c0775572eadbc3053d",
+    "EOA"
+   ],
+   [
+    "0x41538510dac160dc7f034aae18ee0b1f1df18926",
+    "EOA"
+   ],
+   [
+    "0x3d42f45c91279337d6a0fe76a16889288fc767b6",
+    "EOA"
+   ],
+   [
+    "0x85164eb90b7582307299d08f090c165f71e1c6c6",
+    "EOA"
+   ],
+   [
+    "0x0f5621f9ff43c6dbd306b0e1e8f4dfff3ec34c2d",
+    "EOA"
+   ],
+   [
+    "0x48251ac7dbe9ef35409588bec107536d73c3c14a",
+    "EOA"
+   ],
+   [
+    "0xa28e45d291345e1e482161be6e6c2edaba01054b",
+    "EOA"
+   ],
+   [
+    "0x45d63a98b3e65fa587e8e167679033eeff768895",
+    "EOA"
+   ],
+   [
+    "0x514517e8a393cfd317b1a7a7b0f7edacaa49df68",
+    "EOA"
+   ],
+   [
+    "0x04f2be14a4a1267ad7f0b4ba755429df79db22f1",
+    "CONTRACT"
+   ]
+  ]
+ }
+}
