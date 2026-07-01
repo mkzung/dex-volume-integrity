@@ -31,7 +31,7 @@ pw = rep["excluded_window_artifact"][0]
 
 # chart data
 conc = [(tok(c["name"]), round(c["fleet_share_24h"]*100, 1), CH.get(c["net"], "#888"), "flagged") for c in conf]
-conc += [(name.split(" (")[0], round(v["top10_share"]*100, 1), "#a0aec0", "control") for name, v in controls.items()]
+conc += [(name.split(" (")[0] + " (control)", round(v["top10_share"]*100, 1), "#a0aec0", "control") for name, v in controls.items()]
 conc.sort(key=lambda x: x[1])
 fab = sorted(conf, key=lambda c: c["fleet_usd_24h"])
 wv = [(tok(c["name"]), c["window_manuf"], c["fleet_usd_24h"]) for c in conf] + [(tok(pw["name"]) + " (rej)", pw["window_manuf"], pw["onchain_fleet_usd_24h"])]
@@ -110,10 +110,10 @@ code{{background:#edf2f7;padding:1px 5px;border-radius:4px;font-size:12px}}
 
 <script>
 const D={json.dumps(D)};
-const money=v=>'$'+(v>=1e6?(v/1e6).toFixed(2)+'M':(v/1e3).toFixed(0)+'k');
-new Chart(fab,{{type:'bar',data:{{labels:D.fab.map(x=>x[0]),datasets:[{{label:'fabricated $/day',data:D.fab.map(x=>x[1]),backgroundColor:D.fab.map(x=>x[2])}}]}},options:{{indexAxis:'y',plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:c=>money(c.parsed.x)+'/day'}}}}}},scales:{{x:{{ticks:{{callback:money}}}}}}}}}});
-new Chart(conc,{{type:'bar',data:{{labels:D.conc.map(x=>x[0]),datasets:[{{label:'share of 24h pool volume (%)',data:D.conc.map(x=>x[1]),backgroundColor:D.conc.map(x=>x[2])}}]}},options:{{indexAxis:'y',plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:c=>c.parsed.x+'% of pool'}}}}}},scales:{{x:{{max:100,ticks:{{callback:v=>v+'%'}}}}}}}}}});
-new Chart(wv,{{type:'bar',data:{{labels:D.wv.map(x=>x[0]),datasets:[{{label:'sampled-window estimate',data:D.wv.map(x=>x[1]),backgroundColor:'#a0aec0'}},{{label:'direct on-chain 24h',data:D.wv.map(x=>x[2]),backgroundColor:'#2f855a'}}]}},options:{{plugins:{{tooltip:{{callbacks:{{label:c=>c.dataset.label+': '+money(c.parsed.y)}}}}}},scales:{{y:{{ticks:{{callback:money}}}}}}}}}});
+const money=v=>'$'+(v>=1e6?(v/1e6).toFixed(2)+'M':v>=1e3?(v/1e3).toFixed(0)+'k':Math.round(v));
+new Chart(document.getElementById('fab'),{{type:'bar',data:{{labels:D.fab.map(x=>x[0]),datasets:[{{label:'fabricated $/day',data:D.fab.map(x=>x[1]),backgroundColor:D.fab.map(x=>x[2])}}]}},options:{{indexAxis:'y',plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:c=>money(c.parsed.x)+'/day'}}}}}},scales:{{x:{{ticks:{{callback:money}}}}}}}}}});
+new Chart(document.getElementById('conc'),{{type:'bar',data:{{labels:D.conc.map(x=>x[0]),datasets:[{{label:'share of 24h pool volume (%)',data:D.conc.map(x=>x[1]),backgroundColor:D.conc.map(x=>x[2])}}]}},options:{{indexAxis:'y',plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:c=>c.parsed.x+'% of pool'}}}}}},scales:{{x:{{max:100,ticks:{{callback:v=>v+'%'}}}}}}}}}});
+new Chart(document.getElementById('wv'),{{type:'bar',data:{{labels:D.wv.map(x=>x[0]),datasets:[{{label:'sampled-window estimate',data:D.wv.map(x=>x[1]),backgroundColor:'#a0aec0'}},{{label:'direct on-chain 24h',data:D.wv.map(x=>x[2]),backgroundColor:'#2f855a'}}]}},options:{{plugins:{{tooltip:{{callbacks:{{label:c=>c.dataset.label+': '+money(c.parsed.y)}}}}}},scales:{{y:{{ticks:{{callback:money}}}}}}}}}});
 </script>
 </div></body></html>"""
 open(os.path.join(HERE, "index.html"), "w").write(html)
