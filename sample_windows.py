@@ -21,7 +21,7 @@ for l in open(os.path.join(DATA, "flagged_detail.jsonl")):
 live = json.load(open(os.path.join(DATA, "live_recheck.json")))
 
 out = {}
-for w in report["worst"]:
+for w in report["confirmed_onchain"]:
     net, addr, name = w["net"], w["addr"], w["name"]
     d = det[(net, addr)]
     fleet = eoa_set.get(name) or {x[0].lower() for x in d["wallets"]}   # EOA fleet (Solana: all)
@@ -33,30 +33,32 @@ for w in report["worst"]:
         v = float(a.get("volume_in_usd") or 0)
         cnt[wal] += 1; vol[wal] += v; tot_v += v
     n = sum(cnt.values())
-    now_cnt_share = sum(c for wl, c in cnt.items() if wl in fleet) / n if n else 0
-    now_vol_share = sum(vv for wl, vv in vol.items() if wl in fleet) / tot_v if tot_v else 0
+    if n >= 50:                                        # a usable window
+        now_cnt = round(sum(c for wl, c in cnt.items() if wl in fleet) / n, 3)
+        now_vol = round(sum(vv for wl, vv in vol.items() if wl in fleet) / tot_v, 3) if tot_v else None
+    else:
+        now_cnt = now_vol = None                       # empty/thin GeckoTerminal pull -> not a valid window
     tok = name.split("/")[0].strip()
     lv = live.get(tok, {}).get("live_fleet_share")
     out[tok] = {"net": net, "captured_vol_share": d.get("fleet_vol_share"),
                 "captured_cnt_share": d.get("fshare"), "live_cnt_share": lv,
-                "now_cnt_share": round(now_cnt_share, 3), "now_vol_share": round(now_vol_share, 3),
-                "now_trades": n}
-    shares = [s for s in [d.get("fshare"), lv, round(now_cnt_share, 3)] if s is not None]
+                "now_cnt_share": now_cnt, "now_vol_share": now_vol, "now_trades": n}
+    shares = [s for s in [d.get("fshare"), lv, now_cnt] if s is not None]
     out[tok]["cnt_share_min"] = round(min(shares), 3); out[tok]["cnt_share_max"] = round(max(shares), 3)
-    print(f"{tok:7} {net:7} count-share  captured={d.get('fshare')} live={lv} now={now_cnt_share:.3f} "
-          f"| vol-share captured={d.get('fleet_vol_share')} now={now_vol_share:.3f}  (n={n})")
+    print(f"{tok:7} {net:7} count-share captured={d.get('fshare')} live={lv} now={now_cnt} "
+          f"| vol-share captured={d.get('fleet_vol_share')} now={now_vol} (n={n})")
 
-# conservative floor: lowest observed volume-share per pool x its independent daily volume,
-# vs the point estimate in report.json. This bounds the estimate against window variance.
-worst = {w["name"].split("/")[0].strip(): w for w in report["worst"]}
-floor = 0
+# record the observed window range per pool. NOTE: we do NOT turn window shares into a dollar
+# figure - multiplying a window share by a daily total is exactly the over-statement the on-chain
+# measurement (report.json) corrects. This file only documents that the window share is unstable,
+# which is why the headline is measured directly on-chain over a full day rather than extrapolated.
 for tok, o in out.items():
     vshares = [s for s in [o["captured_vol_share"], o["now_vol_share"]] if s is not None]
     o["vol_share_min"] = round(min(vshares), 3); o["vol_share_max"] = round(max(vshares), 3)
-    floor += int(min(vshares) * worst[tok]["ds_daily"])
-out["_summary"] = {"point_estimate_per_day": report["total_confirmed_manuf_per_day"],
-                   "conservative_floor_per_day": floor,
-                   "note": "floor uses each pool's lowest observed volume-share across sampled windows"}
+out["_summary"] = {"point_estimate_per_day": report["total_confirmed_onchain_per_day"],
+                   "note": "fleet share varies by sampled window (per-pool min/max above); this instability "
+                           "is why fabricated volume is measured directly on-chain over 24h in report.json, "
+                           "not extrapolated from a trade-tape window."}
 json.dump(out, open(os.path.join(DATA, "window_robustness.json"), "w"), indent=1)
-print(f"\nconservative floor ${floor:,}/day  |  point estimate ${report['total_confirmed_manuf_per_day']:,}/day")
+print(f"\nwindow-share variance recorded | point estimate (on-chain) ${report['total_confirmed_onchain_per_day']:,}/day")
 print("wrote data/window_robustness.json")

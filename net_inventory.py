@@ -29,7 +29,7 @@ eoa_raw = json.load(open(os.path.join(DATA, "eoa_check.json")))
 eoa_set = {name: [w[0] for w in rec.get("wallets", []) if w[1] == "EOA"] for name, rec in eoa_raw.items()}
 
 out = {}
-for w in report["worst"]:
+for w in report["confirmed_onchain"]:
     net = w["net"]
     if net not in RPC: continue                      # EVM only
     info = gt(net, w["addr"]); time.sleep(2.0)
@@ -46,10 +46,11 @@ for w in report["worst"]:
         usd = (bal / (10**dec)) * price
         holdings_usd += usd; rows.append([wl, round(usd, 2)])
     tok = w["name"].split("/")[0].strip()
-    ratio = holdings_usd / w["ds_daily"] if w["ds_daily"] else 0
+    dv = w["total_usd_24h"]                           # on-chain 24h pool volume (denominator)
+    ratio = holdings_usd / dv if dv else 0
     out[tok] = {"net": net, "token": token, "price_usd": price, "fleet_size": len(fleet),
-                "fleet_holdings_usd": round(holdings_usd, 2), "daily_volume_usd": w["ds_daily"],
+                "fleet_holdings_usd": round(holdings_usd, 2), "daily_volume_usd": dv,
                 "holdings_to_daily_volume": round(ratio, 5), "wallets": rows}
-    print(f"{tok:7} {net:5} fleet={len(fleet)} holdings=${holdings_usd:,.0f} vs daily vol ${w['ds_daily']:,} -> {ratio*100:.3f}% (holdings/volume)")
+    print(f"{tok:7} {net:5} fleet={len(fleet)} holdings=${holdings_usd:,.0f} vs daily vol ${dv:,} -> {ratio*100:.3f}% (holdings/volume)")
 json.dump(out, open(os.path.join(DATA, "net_inventory.json"), "w"), indent=1)
 print("\nwrote data/net_inventory.json")
