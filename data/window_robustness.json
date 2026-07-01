@@ -1,0 +1,59 @@
+{
+ "IN": {
+  "net": "bsc",
+  "captured_vol_share": 0.569,
+  "captured_cnt_share": 0.8,
+  "live_cnt_share": 0.833,
+  "now_cnt_share": 0.77,
+  "now_vol_share": 0.639,
+  "now_trades": 300,
+  "cnt_share_min": 0.77,
+  "cnt_share_max": 0.833,
+  "vol_share_min": 0.569,
+  "vol_share_max": 0.639
+ },
+ "SOSO": {
+  "net": "base",
+  "captured_vol_share": 0.976,
+  "captured_cnt_share": 0.893,
+  "live_cnt_share": 0.987,
+  "now_cnt_share": 0.953,
+  "now_vol_share": 0.995,
+  "now_trades": 300,
+  "cnt_share_min": 0.893,
+  "cnt_share_max": 0.987,
+  "vol_share_min": 0.976,
+  "vol_share_max": 0.995
+ },
+ "ULTIMA": {
+  "net": "bsc",
+  "captured_vol_share": 0.523,
+  "captured_cnt_share": 0.507,
+  "live_cnt_share": 0.2,
+  "now_cnt_share": 0.21,
+  "now_vol_share": 0.221,
+  "now_trades": 300,
+  "cnt_share_min": 0.2,
+  "cnt_share_max": 0.507,
+  "vol_share_min": 0.221,
+  "vol_share_max": 0.523
+ },
+ "PYTH": {
+  "net": "solana",
+  "captured_vol_share": 0.565,
+  "captured_cnt_share": 0.587,
+  "live_cnt_share": null,
+  "now_cnt_share": 0.347,
+  "now_vol_share": 0.344,
+  "now_trades": 300,
+  "cnt_share_min": 0.347,
+  "cnt_share_max": 0.587,
+  "vol_share_min": 0.344,
+  "vol_share_max": 0.565
+ },
+ "_summary": {
+  "point_estimate_per_day": 4864886,
+  "conservative_floor_per_day": 4410343,
+  "note": "floor uses each pool's lowest observed volume-share across sampled windows"
+ }
+}

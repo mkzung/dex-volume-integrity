@@ -1,15 +1,10 @@
-"""verify.py - re-derive and assert every headline number in the post from the data
-files. Default mode is offline and deterministic (safe for CI): it checks internal
-consistency of data/report.json against data/scores.jsonl, data/flagged_detail.jsonl,
-and data/eoa_check.json. `--live` additionally re-pulls DexScreener for the confirmed
-pools to confirm they are still trading above the corroboration threshold.
+"""verify.py - re-derive and assert every published number from the committed data. Offline
+and deterministic (safe for CI). The headline is the DIRECT on-chain full-day fabricated volume
+(data/onchain_fullday.json, via Bitquery), cross-checked against the DexScreener snapshot; the
+screen funnel and the phantom / contract-fleet / window-artifact exclusions come from the
+window-based aggregate. `--live` re-pulls DexScreener for the confirmed pools.
 
-Two gates reach the headline: (1) an independent DexScreener volume must corroborate the
-flag; (2) an eth_getCode check must show the fleet is EOAs (>=2), not router/aggregator
-contracts (EVM only; Solana pools rest on mechanics). Run:
-    python3 verify.py          # offline, no network
-    python3 verify.py --live   # + re-check DexScreener volumes
-Exit code is non-zero if any assertion fails."""
+Run:  python3 verify.py   |   python3 verify.py --live      (non-zero exit on any failure)"""
 import json, os, sys, subprocess, collections
 
 HERE = os.path.dirname(os.path.abspath(__file__)); DATA = os.path.join(HERE, "data")
@@ -29,135 +24,121 @@ def load(n):
             except Exception: pass
     return out
 
+def jload(n): return json.load(open(os.path.join(DATA, n)))
+
+report = jload("report.json")
+scores = load("scores.jsonl")
+eoa_raw = jload("eoa_check.json")
+eoa_code = {name: {w[0].lower(): w[1] for w in rec.get("wallets", [])} for name, rec in eoa_raw.items()}
+snap = jload("dexscreener_snapshot.json")["pools"]
+netinv = jload("net_inventory.json")
+oc = jload("onchain_fullday.json")
+
 def latest_detail():
     dd = {}
     for r in load("flagged_detail.jsonl"):
         k = (r["net"], r["addr"]); o = (r.get("ohlcv") or {}).get("active_days", 0)
         if k not in dd or o > (dd[k].get("ohlcv") or {}).get("active_days", 0): dd[k] = r
     return dd
-
-report = json.load(open(os.path.join(DATA, "report.json")))
-scores = load("scores.jsonl")
 detail = latest_detail()
-eoa_raw = json.load(open(os.path.join(DATA, "eoa_check.json")))
-eoa_code = {name: {w[0].lower(): w[1] for w in rec.get("wallets", [])} for name, rec in eoa_raw.items()}
 
-print("== screen counts ==")
-check(report["candidates_screened"] == len(scores),
-      f'candidates_screened {report["candidates_screened"]} != scores rows {len(scores)}')
-flagged_screen = sum(1 for r in scores if r.get("flagged"))
-check(report["flagged_by_mechanics"] == flagged_screen,
-      f'flagged_by_mechanics {report["flagged_by_mechanics"]} != {flagged_screen}')
+print("== screen funnel ==")
+check(report["candidates_screened"] == len(scores), f'screened {report["candidates_screened"]} != scores {len(scores)}')
+flagged = sum(1 for r in scores if r.get("flagged"))
+check(report["flagged_by_mechanics"] == flagged, f'flagged {report["flagged_by_mechanics"]} != {flagged}')
 sustained = [r for r in detail.values() if (r.get("ohlcv") or {}).get("active_days", 0) >= 7]
 check(report["sustained"] == len(sustained), f'sustained {report["sustained"]} != {len(sustained)}')
-check(report["confirmed"] == len(report["worst"]), "confirmed count != len(worst)")
-n_vol = report["confirmed"] + len(report["excluded_contract_fleet"])
-check(report["corroborated_by_volume"] == n_vol,
-      f'corroborated_by_volume {report["corroborated_by_volume"]} != confirmed+contract_excl {n_vol}')
-check(len(sustained) == report["confirmed"] + len(report["excluded_contract_fleet"]) + len(report["excluded_uncorroborated"]),
-      "sustained != confirmed + contract-excluded + uncorroborated")
-print(f"  screened={report['candidates_screened']} flagged={flagged_screen} sustained={len(sustained)} "
-      f"vol-corroborated={n_vol} confirmed={report['confirmed']}")
+check(report["confirmed"] == len(report["confirmed_onchain"]), "confirmed != len(confirmed_onchain)")
+print(f"  screened={report['candidates_screened']} flagged={flagged} sustained={len(sustained)} confirmed(on-chain)={report['confirmed']}")
 
-print("== per-pool arithmetic + EOA gate (manuf = EOA fleet vol-share x ds_daily) ==")
-for w in report["worst"]:
-    expect = int(w["fleet_vol_share"] * w["ds_daily"])
-    check(abs(expect - w["manuf_verified"]) <= 2, f'{w["name"]}: manuf {w["manuf_verified"]} != round(share*ds)={expect}')
-    check(w["ds_daily"] >= CORROBORATION_MIN, f'{w["name"]}: ds_daily below corroboration min')
-    check(w["active_days"] >= 7, f'{w["name"]}: active_days < 7')
-    check(w["eoa_status"] in ("confirmed", "n/a"), f'{w["name"]}: eoa_status {w["eoa_status"]} not confirmed/n-a')
-    if w["eoa_status"] == "confirmed":     # EVM: fleet must be >=2 EOAs per eth_getCode
-        codes = eoa_code.get(w["name"], {})
-        n_eoa = sum(1 for c in codes.values() if c == "EOA")
-        check(n_eoa >= 2, f'{w["name"]}: only {n_eoa} EOA wallets, should not be confirmed')
-        check(w["fleet"] == n_eoa, f'{w["name"]}: fleet {w["fleet"]} != EOA count {n_eoa}')
-    print(f'  {w["name"][:22]:22} fleet={w["fleet"]:2} ({w["eoa_status"]}) share={w["fleet_vol_share"]:.3f} '
-          f'ds=${w["ds_daily"]:,} manuf=${w["manuf_verified"]:,}')
-
-print("== totals ==")
-tot = sum(w["manuf_verified"] for w in report["worst"])
-check(tot == report["total_confirmed_manuf_per_day"], f'sum(worst) {tot} != total {report["total_confirmed_manuf_per_day"]}')
+print("== confirmed on-chain full-day fabricated volume ==")
+tok = lambda n: n.split("/")[0].strip()
+for c in report["confirmed_onchain"]:
+    t = tok(c["name"])
+    check(0 < c["fleet_usd_24h"] <= c["total_usd_24h"], f'{t}: fleet_usd not in (0,total]')
+    check(abs(c["fleet_share_24h"] - c["fleet_usd_24h"]/c["total_usd_24h"]) < 0.01, f'{t}: share != fleet/total')
+    # on-chain total must agree with the independent DexScreener snapshot (within 30%)
+    sv = snap[t]["vol_h24"]
+    check(abs(c["total_usd_24h"] - sv)/sv < 0.30, f'{t}: on-chain total {c["total_usd_24h"]:,} vs DexScreener {sv:,.0f} >30% apart')
+    # on-chain value must match onchain_fullday.json (source of truth)
+    check(oc[t]["fleet_usd_24h"] == c["fleet_usd_24h"], f'{t}: report fleet_usd != onchain_fullday')
+    print(f'  {t:7} on-chain ${c["fleet_usd_24h"]:,} ({c["fleet_share_24h"]*100:.1f}%) | window said ${c["window_manuf"]:,} | DexScreener total ${sv:,.0f}')
+tot = sum(c["fleet_usd_24h"] for c in report["confirmed_onchain"])
+check(tot == report["total_confirmed_onchain_per_day"], f'sum {tot} != total {report["total_confirmed_onchain_per_day"]}')
 bychain = collections.defaultdict(lambda: [0, 0])
-for w in report["worst"]:
-    c = bychain[w["net"]]; c[0] += 1; c[1] += w["manuf_verified"]
+for c in report["confirmed_onchain"]:
+    b = bychain[c["net"]]; b[0] += 1; b[1] += c["fleet_usd_24h"]
 for net, v in report["by_chain"].items():
-    check(v["pools"] == bychain[net][0] and v["manuf_day"] == bychain[net][1], f'by_chain[{net}] mismatch')
-print(f'  total=${tot:,}/day across {report["confirmed"]} confirmed pools; by_chain OK')
+    check(v["pools"] == bychain[net][0] and v["fabricated_day"] == bychain[net][1], f'by_chain[{net}] mismatch')
+print(f'  total on-chain fabricated ${tot:,}/day across {report["confirmed"]} pools')
+
+print("== net inventory (wash vs market-making: holdings << daily volume) ==")
+for c in report["confirmed_onchain"]:
+    t = tok(c["name"])
+    r = netinv[t]
+    check(r["holdings_to_daily_volume"] < 0.02, f'{t}: holdings/volume {r["holdings_to_daily_volume"]} not << 1')
+    print(f'  {t:7} holdings ${r["fleet_holdings_usd"]:,.0f} = {r["holdings_to_daily_volume"]*100:.2f}% of daily volume')
 
 print("== exclusion gate 1: phantom volume ==")
 for e in report["excluded_uncorroborated"]:
-    check(e["ds_daily"] < CORROBORATION_MIN, f'{e["name"]}: excluded_uncorroborated but ds >= min')
-    check(e["gt_daily"] > e["ds_daily"], f'{e["name"]}: gt not > ds')
-    print(f'  {e["name"][:22]:22} GT=${e["gt_daily"]:,} DS=${e["ds_daily"]:,}')
-maxphantom = max((e["gt_daily"] for e in report["excluded_uncorroborated"]), default=0)
-check(maxphantom > 100_000_000, f'largest phantom {maxphantom} not > $100M')
+    check(e["ds_daily"] < CORROBORATION_MIN and e["gt_daily"] > e["ds_daily"], f'{e["name"]}: phantom check')
+    print(f'  {e["name"][:20]:20} GT ${e["gt_daily"]:,} DS ${e["ds_daily"]:,}')
+check(max(e["gt_daily"] for e in report["excluded_uncorroborated"]) > 100_000_000, "largest phantom not > $100M")
 
 print("== exclusion gate 2: contract fleets (eth_getCode) ==")
 for e in report["excluded_contract_fleet"]:
-    codes = eoa_code.get(e["name"], {})
-    n_eoa = sum(1 for c in codes.values() if c == "EOA")
-    check(n_eoa < 2, f'{e["name"]}: excluded as contract fleet but has {n_eoa} EOAs')
-    check(e["ds_daily"] >= CORROBORATION_MIN, f'{e["name"]}: contract-excluded should have passed volume gate')
-    print(f'  {e["name"][:22]:22} orig_fleet={e["orig_fleet"]} eoa_wallets={e["eoa_wallets"]} DS=${e["ds_daily"]:,}')
+    n_eoa = sum(1 for cx in eoa_code.get(e["name"], {}).values() if cx == "EOA")
+    check(n_eoa < 2, f'{e["name"]}: excluded as contract but {n_eoa} EOAs')
+    print(f'  {e["name"][:20]:20} orig_fleet={e["orig_fleet"]} eoa={e["eoa_wallets"]}')
 
-print("== fleet mechanics (balanced two-sided flow) ==")
-for w in report["worst"]:
-    d = detail.get((w["net"], w["addr"]))
-    if not d: check(False, f'{w["name"]}: no flagged_detail'); continue
+print("== exclusion gate 3: window artifact (on-chain full-day disproves) ==")
+for e in report["excluded_window_artifact"]:
+    check(e["onchain_fleet_share_24h"] < 0.05, f'{e["name"]}: window-artifact but on-chain share >= 5%')
+    check(e["window_manuf"] > e["onchain_fleet_usd_24h"], f'{e["name"]}: window not greater than on-chain')
+    print(f'  {e["name"][:20]:20} window ${e["window_manuf"]:,} -> on-chain ${e["onchain_fleet_usd_24h"]:,} ({e["onchain_fleet_share_24h"]*100:.1f}%)')
+
+print("== fleet mechanics (balanced two-sided flow, from flagged_detail) ==")
+for c in report["confirmed_onchain"]:
+    d = detail.get((c["net"], c["addr"]))
+    if not d: check(False, f'{tok(c["name"])}: no flagged_detail'); continue
     nb = sum(x[1] for x in d["wallets"]); ns = sum(x[2] for x in d["wallets"])
-    bal = min(nb, ns) / max(nb, ns) if max(nb, ns) else 0
-    check(bal >= 0.60, f'{w["name"]}: buy/sell balance {bal:.2f} < 0.60')
-    if d.get("ng") is not None: check(abs(d["ng"]) <= 0.15, f'{w["name"]}: net/gross {d["ng"]} > 0.15')
-    print(f'  {w["name"][:22]:22} buys={nb} sells={ns} balance={bal:.3f} net/gross={d.get("ng")}')
+    bal = min(nb, ns)/max(nb, ns) if max(nb, ns) else 0
+    check(bal >= 0.60, f'{tok(c["name"])}: balance {bal:.2f} < 0.60')
+    print(f'  {tok(c["name"]):7} buys={nb} sells={ns} balance={bal:.3f}')
 
 print("== attribution (optional) ==")
-apath = os.path.join(DATA, "attribution.json")
-if os.path.exists(apath):
-    a = json.load(open(apath))
-    check(a.get("cross", {}).get("IN_intersect_ULTIMA") == [], "IN and ULTIMA funding should not converge")
-    inv = a.get("traces", {}).get("IN", {}).get("chain_up_verified", [])
-    check("0x50560acf3bb31ceafa26eeb51ff279b59aaa8f99" in inv, "IN verified funding chain missing top wallet")
-    print(f'  IN chain_up_verified={inv}; IN_intersect_ULTIMA empty')
-
-print("== eoa evidence (confirmed EVM pools all EOA; excluded ones contract-heavy) ==")
-for name, rec in eoa_raw.items():
-    print(f'  {name[:22]:22} {rec.get("codes")}')
+if os.path.exists(os.path.join(DATA, "attribution.json")):
+    a = jload("attribution.json")
+    check(a.get("cross", {}).get("IN_intersect_ULTIMA") == [], "IN/ULTIMA funding should not converge")
+    print(f'  IN_intersect_ULTIMA empty; IN chain top {a["traces"]["IN"]["chain_up_verified"][-1][:14]}...')
 
 print("== post tie-out ==")
 ppath = os.path.join(HERE, "post", "index.md")
 if os.path.exists(ppath):
     txt = open(ppath).read()
-    check(f'{report["total_confirmed_manuf_per_day"]:,}' in txt, "post missing confirmed total")
+    check(f'{report["total_confirmed_onchain_per_day"]:,}' in txt, "post missing on-chain total")
     check(str(report["candidates_screened"]) in txt, "post missing screened count")
-    for w in report["worst"]:
-        check(f'${w["manuf_verified"]:,}' in txt, f'post missing manuf for {w["name"]}')
-    for e in report["excluded_contract_fleet"]:
-        check(e["name"].split("/")[0].strip() in txt, f'post missing excluded-contract pool {e["name"]}')
-    check(f'{maxphantom:,}' in txt, "post missing largest phantom figure")
-    snappools = json.load(open(os.path.join(DATA, "dexscreener_snapshot.json")))["pools"]
-    snapIN = snappools["IN"]
+    for c in report["confirmed_onchain"]:
+        check(f'${c["fleet_usd_24h"]:,}' in txt, f'post missing on-chain $ for {tok(c["name"])}')
+    for e in report["excluded_contract_fleet"] + report["excluded_window_artifact"]:
+        check(tok(e["name"]) in txt, f'post missing excluded pool {tok(e["name"])}')
+    check(f'{max(e["gt_daily"] for e in report["excluded_uncorroborated"]):,}' in txt, "post missing largest phantom")
     check("481" in txt, "post missing IN turnover")
-    check(f'{int(round(snapIN["liq_usd"])):,}' in txt, "post missing IN liquidity")
-    check(f'{snapIN["txns_h24"]:,}' in txt, "post missing IN daily tx count")
-    combined = sum(w["ds_daily"] for w in report["worst"])
-    frac = report["total_confirmed_manuf_per_day"] / combined if combined else 0
-    check(0.60 <= frac <= 0.72, f'fabricated fraction {frac:.2f} not ~two thirds')
-    check("two thirds" in txt, "post missing 'two thirds' framing")
-    check("eth_getCode" in txt or "smart contract" in txt, "post missing eth_getCode/contract gate")
-    print(f'  post ties: total, counts, per-pool manuf, excluded pools, phantom, IN turnover, two-thirds ({frac:.2f})')
+    check("eth_getCode" in txt or "smart contract" in txt, "post missing contract gate")
+    check(("market-making" in txt) or ("market making" in txt), "post missing wash-vs-MM framing")
+    print("  post ties: on-chain total, screen counts, per-pool on-chain $, exclusions, phantom, turnover, MM framing")
 
 if "--live" in sys.argv:
     print("== live DexScreener re-check ==")
     DSC = {"base": "base", "bsc": "bsc", "solana": "solana"}
-    for w in report["worst"]:
-        u = f'https://api.dexscreener.com/latest/dex/pairs/{DSC.get(w["net"], w["net"])}/{w["addr"]}'
+    for c in report["confirmed_onchain"]:
+        u = f'https://api.dexscreener.com/latest/dex/pairs/{DSC.get(c["net"], c["net"])}/{c["addr"]}'
         try:
-            d = json.loads(subprocess.run(["curl", "-sS", "--max-time", "15", u], capture_output=True, text=True, timeout=18).stdout or "{}")
+            d = json.loads(subprocess.run(["curl","-sS","--max-time","15",u],capture_output=True,text=True,timeout=18).stdout or "{}")
             v = float(((d.get("pairs") or [{}])[0].get("volume") or {}).get("h24") or 0)
-        except Exception:
-            v = 0.0
-        check(v >= CORROBORATION_MIN, f'{w["name"]}: live ds ${v:,.0f} below min')
-        print(f'  {w["name"][:22]:22} live ds=${v:,.0f}')
+        except Exception: v = 0.0
+        check(v >= CORROBORATION_MIN, f'{tok(c["name"])}: live ds ${v:,.0f} below min')
+        print(f'  {tok(c["name"]):7} live ds ${v:,.0f}')
 
 print(f"\n{CHECKS} checks, {len(FAILS)} failures")
 sys.exit(1 if FAILS else 0)

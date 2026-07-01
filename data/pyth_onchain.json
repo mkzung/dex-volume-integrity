@@ -1,0 +1,27 @@
+{
+ "pool_daily_usd": 383566,
+ "fleet_pyth_usd_24h": 206,
+ "fleet_share_24h": 0.001,
+ "wallets": [
+  [
+   "HYe4vSaEGqQKnDrxWDrk3o5H2gznv7qtij5G6NNG8WHd",
+   0,
+   0
+  ],
+  [
+   "MfDuWeqSHEqTFVYZ7LoexgAK9dxk7cy4DFJWjWMGVWa",
+   206,
+   3
+  ],
+  [
+   "JD6rVaerbyz6wjQ433nrw6bFTgFrp46MiYmi8EtUAfsG",
+   0,
+   0
+  ],
+  [
+   "R32xAccFis3YzBzGwZ1C4QkGiehLxSao7gDmErA3kjk",
+   0,
+   0
+  ]
+ ]
+}

@@ -1,0 +1,26 @@
+{
+ "IN": {
+  "net": "bsc",
+  "total_usd_24h": 3477696,
+  "fleet_usd_24h": 324150,
+  "fleet_share_24h": 0.093,
+  "fleet_size": 3,
+  "since": "2026-06-30T11:58:08Z"
+ },
+ "ULTIMA": {
+  "net": "bsc",
+  "total_usd_24h": 1206839,
+  "fleet_usd_24h": 506707,
+  "fleet_share_24h": 0.42,
+  "fleet_size": 11,
+  "since": "2026-06-30T11:58:08Z"
+ },
+ "SOSO": {
+  "net": "base",
+  "total_usd_24h": 2037268,
+  "fleet_usd_24h": 2014730,
+  "fleet_share_24h": 0.989,
+  "fleet_size": 11,
+  "since": "2026-06-30T11:58:08Z"
+ }
+}

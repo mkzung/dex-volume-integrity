@@ -1,0 +1,135 @@
+{
+ "IN": {
+  "net": "bsc",
+  "token": "0x61fac5f038515572d6f42d4bcb6b581642753d50",
+  "price_usd": 0.0643514630138646,
+  "fleet_size": 3,
+  "fleet_holdings_usd": 0.0,
+  "daily_volume_usd": 3518004,
+  "holdings_to_daily_volume": 0.0,
+  "wallets": [
+   [
+    "0xc86dc6285370a8ce053f15a9e19a3ba23e001172",
+    0.0
+   ],
+   [
+    "0xc3f5edd05a3ed1072e75c05720d910c56db8fd1d",
+    0.0
+   ],
+   [
+    "0x7afab4299d2a85559ab9e2ef76e3d64820f7195b",
+    0.0
+   ]
+  ]
+ },
+ "SOSO": {
+  "net": "base",
+  "token": "0x624e2e7fdc8903165f64891672267ab0fcb98831",
+  "price_usd": 0.282869656519212,
+  "fleet_size": 11,
+  "fleet_holdings_usd": 2546.08,
+  "daily_volume_usd": 2049436,
+  "holdings_to_daily_volume": 0.00124,
+  "wallets": [
+   [
+    "0x7d9361b6926830f500da3621ad39187b6b19dfc2",
+    0.0
+   ],
+   [
+    "0xf394548fe1500a7a0a7aaefed3f1de674af260e6",
+    852.65
+   ],
+   [
+    "0x0bb3caf2b320a201cc6412c0775572eadbc3053d",
+    849.16
+   ],
+   [
+    "0x41538510dac160dc7f034aae18ee0b1f1df18926",
+    844.26
+   ],
+   [
+    "0x3d42f45c91279337d6a0fe76a16889288fc767b6",
+    0.0
+   ],
+   [
+    "0x85164eb90b7582307299d08f090c165f71e1c6c6",
+    0.0
+   ],
+   [
+    "0x0f5621f9ff43c6dbd306b0e1e8f4dfff3ec34c2d",
+    0.0
+   ],
+   [
+    "0x48251ac7dbe9ef35409588bec107536d73c3c14a",
+    0.0
+   ],
+   [
+    "0xa28e45d291345e1e482161be6e6c2edaba01054b",
+    0.0
+   ],
+   [
+    "0x45d63a98b3e65fa587e8e167679033eeff768895",
+    0.0
+   ],
+   [
+    "0x514517e8a393cfd317b1a7a7b0f7edacaa49df68",
+    0.0
+   ]
+  ]
+ },
+ "ULTIMA": {
+  "net": "bsc",
+  "token": "0x5668a83b46016b494a30dd14066a451e5417a8b8",
+  "price_usd": 1930.30325977519,
+  "fleet_size": 11,
+  "fleet_holdings_usd": 376.19,
+  "daily_volume_usd": 1252324,
+  "holdings_to_daily_volume": 0.0003,
+  "wallets": [
+   [
+    "0x5d07fa4c3d99477a9c1eb0b7846e6e2718e98cc0",
+    0.0
+   ],
+   [
+    "0x51172caf01de95d2b562a205183696e6258d8d72",
+    376.19
+   ],
+   [
+    "0x1945f590a45d3bbfb092b35f56fd008df8b21b8e",
+    0.0
+   ],
+   [
+    "0x56132f29a507dddfe17b7c84cc845d161624208b",
+    0.0
+   ],
+   [
+    "0x13506f1729cbf84dd2bd8e8f5b3f1aefb68eed06",
+    0.0
+   ],
+   [
+    "0x52f5332b350b20c412ab3c21bce83e6121650617",
+    0.0
+   ],
+   [
+    "0xf5a79be1d3c364718f4d0bb55bb0dc3df53ec2b3",
+    0.0
+   ],
+   [
+    "0x0efcd1f41d44fe68f7f83355cf041e705d4fa99d",
+    0.0
+   ],
+   [
+    "0xc2370231165197feb1908a5efde1b85a97fe79bb",
+    0.0
+   ],
+   [
+    "0x6fc723fd6b4a3ce6787d57002e37425f27fc591a",
+    0.0
+   ],
+   [
+    "0x035380fc83f020468529bf0e28a19f5938a65b84",
+    0.0
+   ]
+  ]
+ }
+}
