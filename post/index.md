@@ -16,7 +16,7 @@ entities:
 2. **SOSO/USDC (Base) is a near-pure wash pool.** Eleven externally-owned wallets are **98.9 percent** of its 24-hour volume (about 2.0 million dollars) and hold near-zero inventory.
 3. **ULTIMA/USDT (BNB Chain) is a single automated operator.** Eleven wallets (42 percent, about 0.5 million dollars) are fed by one relay bot and hold near-zero inventory.
 4. **The loudest reported numbers are fictional.** One pool showed **395,507,943 dollars** of daily volume on GeckoTerminal and zero on an independent source; such phantom pools are excluded.
-5. **Turnover is not the tell; concentration is.** Liquid control pools run high turnover too, but their ten largest traders hold only 26 to 28 percent of volume, against 42 to 99 percent for the flagged fleets.
+5. **Turnover is not the tell; concentration is.** Liquid control pools run high turnover too, but their ten largest traders hold only 26 to 28 percent of volume; SOSO (99 percent) and ULTIMA (42 percent) sit well above that, while the weakest case, IN (9 percent), sits below and rests on other signals.
 6. **A trade-tape snapshot over-states bursty fleets.** Measuring full-day on-chain volume cut one pool's figure roughly six-fold and rejected a fourth pool outright, so every headline number is a direct 24-hour on-chain measurement, not an extrapolation.
 7. **Read this as a flag, not a verdict.** The evidence shows deliberate self-trading and single-operator funding, not intent or off-chain identity. Every number below is re-derived from the committed data by a `verify.py` script.
 
