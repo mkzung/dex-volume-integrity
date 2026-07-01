@@ -23,6 +23,16 @@ def bq(q):
         time.sleep(1.5*(a+1))
     return {}
 
+def gt_liq_turnover(net, addr):
+    u = f"https://api.geckoterminal.com/api/v2/networks/{net}/pools/{addr}"
+    try:
+        d = json.loads(subprocess.run(["curl","-sS","--max-time","15",u],capture_output=True,text=True,timeout=18).stdout or "{}")
+        a = (d.get("data") or {}).get("attributes", {})
+        liq = float(a.get("reserve_in_usd") or 0); vol = float((a.get("volume_usd") or {}).get("h24") or 0)
+        return round(liq), round(vol/liq, 1) if liq else None
+    except Exception:
+        return None, None
+
 def total_usd(net, pool):
     q = '{ EVM(network: %s){ DEXTrades(where:{Trade:{Dex:{SmartContract:{is:"%s"}}},Block:{Time:{since:"%s"}}}){ sum(of: Trade_Buy_AmountInUSD) } } }' % (net, pool, SINCE)
     d = bq(q); time.sleep(0.5)
@@ -38,14 +48,19 @@ def top_traders(net, pool, n=10):
 
 out = {}
 for name, (net, pool) in CONTROLS.items():
-    tot = total_usd(net, pool)
-    top = top_traders(net, pool, 10)
+    tot = 0
+    for _try in range(5):                 # base DEXTrades is intermittently empty; retry on zero
+        tot = total_usd(net, pool)
+        if tot > 0: break
+        time.sleep(2)
+    top = top_traders(net, pool, 10) if tot > 0 else []
     top1 = top[0][1] if top else 0
     top10 = sum(v for _, v in top)
-    out[name] = {"net": net, "addr": pool, "total_usd_24h": round(tot),
+    liq, turnover = gt_liq_turnover(net, pool); time.sleep(1.0)
+    out[name] = {"net": net, "addr": pool, "total_usd_24h": round(tot), "liq_usd": liq, "turnover": turnover,
                  "top1_share": round(top1/tot, 3) if tot else None,
                  "top10_share": round(top10/tot, 3) if tot else None,
                  "top10": [[w, round(v)] for w, v in top]}
-    print(f"{name:18} total24h=${tot:,.0f}  top1={top1/tot*100:.1f}%  top10={top10/tot*100:.1f}%" if tot else f"{name}: no data")
+    print(f"{name:18} total24h=${tot:,.0f} liq=${liq:,} turnover={turnover}x top1={top1/tot*100:.1f}% top10={top10/tot*100:.1f}%" if tot else f"{name}: no data")
 json.dump(out, open(os.path.join(DATA, "controls.json"), "w"), indent=1)
 print("\nwrote data/controls.json  (contrast: flagged fleets hold 9-99% of pool volume)")

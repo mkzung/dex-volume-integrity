@@ -1,0 +1,78 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Fabricated DEX Volume - dex-volume-integrity</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--ink:#1a202c;--muted:#718096;--line:#e2e8f0;--bg:#f7fafc}
+*{box-sizing:border-box} body{margin:0;font:15px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:980px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:24px;margin:0 0 4px} h2{font-size:18px;margin:34px 0 10px;border-bottom:2px solid var(--line);padding-bottom:6px}
+.sub{color:var(--muted);margin:0 0 22px}
+.hero{display:flex;gap:16px;flex-wrap:wrap;margin:18px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;flex:1;min-width:150px}
+.stat .n{font-size:26px;font-weight:700} .stat .l{color:var(--muted);font-size:13px}
+.funnel{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.chip{background:#fff;border:1px solid var(--line);border-radius:20px;padding:6px 14px;font-size:14px}
+.chip b{font-size:16px} .arrow{color:var(--muted)}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}
+th{background:#edf2f7;font-weight:600} td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0}
+.card h3{margin:0 0 6px;font-size:15px} .card p{margin:0;color:var(--muted);font-size:13px}
+canvas{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;margin:6px 0}
+.foot{color:var(--muted);font-size:12px;margin-top:34px;border-top:1px solid var(--line);padding-top:14px}
+code{background:#edf2f7;padding:1px 5px;border-radius:4px;font-size:12px}
+</style></head><body><div class=wrap>
+<h1>Fabricated Volume on Low-Cap DEX Pools</h1>
+<p class=sub>Direct on-chain census of lockstep-bot wash trading &middot; Base + BNB Chain &middot; as of 2026-07-01</p>
+
+<div class=hero>
+ <div class=stat><div class=n>$2.85M</div><div class=l>fabricated / day (on-chain, 24h)</div></div>
+ <div class=stat><div class=n>3</div><div class=l>confirmed pools</div></div>
+ <div class=stat><div class=n>73</div><div class=l>pools screened</div></div>
+ <div class=stat><div class=n>3</div><div class=l>independent filters</div></div>
+</div>
+
+<h2>Screen funnel</h2>
+<div class=funnel>
+ <span class=chip><b>73</b> screened</span><span class=arrow>&rarr;</span>
+ <span class=chip><b>10</b> flagged</span><span class=arrow>&rarr;</span>
+ <span class=chip><b>9</b> sustained</span><span class=arrow>&rarr;</span>
+ <span class=chip style="border-color:#38a169"><b>3</b> confirmed</span>
+</div>
+
+<h2>Confirmed fabricated volume (measured directly on-chain over 24h)</h2>
+<table><tr><th>Pool</th><th>Chain</th><th class=r>EOA fleet</th><th class=r>Fabricated / day</th><th class=r>Fleet share</th><th class=r>Pool volume 24h</th></tr><tr><td><b>SOSO</b></td><td>BASE</td><td class=r>11</td><td class=r>$2,014,730</td><td class=r>98.9%</td><td class=r>$2,037,268</td></tr><tr><td><b>ULTIMA</b></td><td>BSC</td><td class=r>11</td><td class=r>$506,707</td><td class=r>42.0%</td><td class=r>$1,206,839</td></tr><tr><td><b>IN</b></td><td>BSC</td><td class=r>3</td><td class=r>$324,150</td><td class=r>9.3%</td><td class=r>$3,477,696</td></tr></table>
+<canvas id=fab height=120></canvas>
+
+<h2>Concentration is the discriminator, not turnover</h2>
+<p class=sub>Liquid controls run high turnover too (WETH/USDC 6.9x, USDT/WBNB 6.6x), but their top-10 traders hold only 26-28% of volume, versus the flagged fleets below.</p>
+<canvas id=conc height=150></canvas>
+
+<h2>Why full-day on-chain, not a snapshot</h2>
+<p class=sub>A ~300-trade window over-states bursty fleets. Measuring the fleet's real 24h volume corrects it: IN falls from a snapshot-implied ~$2.0M to $324k, and PYTH is rejected.</p>
+<canvas id=wv height=130></canvas>
+
+<h2>Wash trading, not market-making</h2>
+<p class=sub>Fleets hold almost no inventory versus what they trade: they cycle the same funds.</p>
+<table><tr><th>Pool</th><th class=r>Fleet holdings</th><th class=r>Daily volume</th><th class=r>Holdings / volume</th></tr><tr><td><b>SOSO</b></td><td class=r>$2,546</td><td class=r>$2,049,436</td><td class=r>0.12%</td></tr><tr><td><b>ULTIMA</b></td><td class=r>$376</td><td class=r>$1,252,324</td><td class=r>0.03%</td></tr><tr><td><b>IN</b></td><td class=r>$0</td><td class=r>$3,518,004</td><td class=r>0.00%</td></tr></table>
+
+<h2>What was excluded, and why</h2>
+<div class=card><h3>Phantom volume (independent source shows zero)</h3>
+<table><tr><th>Pool</th><th>Chain</th><th class=r>GeckoTerminal</th><th class=r>DexScreener</th></tr><tr><td><b>quq</b></td><td>BSC</td><td class=r>$20,119,960</td><td class=r>$0</td></tr><tr><td><b>quq</b></td><td>BSC</td><td class=r>$395,507,943</td><td class=r>$0</td></tr><tr><td><b>ARX</b></td><td>BSC</td><td class=r>$14,115,534</td><td class=r>$0</td></tr></table></div>
+<div class=card><h3>Contract fleets (eth_getCode: traded by routers/aggregators, not EOAs)</h3>
+<table><tr><th>Pool</th><th>Chain</th><th class=r>EOA / fleet</th></tr><tr><td><b>DUAL</b></td><td>BASE</td><td class=r>1/10</td></tr><tr><td><b>BASED</b></td><td>BSC</td><td class=r>1/2</td></tr></table></div>
+<div class=card><h3>Window artifact (rejected by the full-day on-chain check)</h3>
+<p>PYTH (SOLANA): snapshot implied $216,125, but on-chain over 24h the wallets traded $206 (0.1% of the pool).</p></div>
+
+<div class=foot>Generated by <code>build_dashboard.py</code> from the same committed data that <code>verify.py</code> asserts; it cannot drift from the post. Companion repository and exact commit are linked with the submission. Figures use on-chain volume via Bitquery/Helius, cross-checked against DexScreener.</div>
+
+<script>
+const D={"conc": [["IN", 9.3, "#d69e2e", "flagged"], ["USDT/WBNB", 26.2, "#a0aec0", "control"], ["WETH/USDC", 28.2, "#a0aec0", "control"], ["ULTIMA", 42.0, "#d69e2e", "flagged"], ["SOSO", 98.9, "#2563eb", "flagged"]], "fab": [["IN", 324150, "#d69e2e"], ["ULTIMA", 506707, "#d69e2e"], ["SOSO", 2014730, "#2563eb"]], "wv": [["SOSO", 1992052, 2014730], ["ULTIMA", 654965, 506707], ["IN", 2001744, 324150], ["PYTH (rej)", 216125, 206]]};
+const money=v=>'$'+(v>=1e6?(v/1e6).toFixed(2)+'M':(v/1e3).toFixed(0)+'k');
+new Chart(fab,{type:'bar',data:{labels:D.fab.map(x=>x[0]),datasets:[{label:'fabricated $/day',data:D.fab.map(x=>x[1]),backgroundColor:D.fab.map(x=>x[2])}]},options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>money(c.parsed.x)+'/day'}}},scales:{x:{ticks:{callback:money}}}}});
+new Chart(conc,{type:'bar',data:{labels:D.conc.map(x=>x[0]),datasets:[{label:'share of 24h pool volume (%)',data:D.conc.map(x=>x[1]),backgroundColor:D.conc.map(x=>x[2])}]},options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.x+'% of pool'}}},scales:{x:{max:100,ticks:{callback:v=>v+'%'}}}}});
+new Chart(wv,{type:'bar',data:{labels:D.wv.map(x=>x[0]),datasets:[{label:'sampled-window estimate',data:D.wv.map(x=>x[1]),backgroundColor:'#a0aec0'},{label:'direct on-chain 24h',data:D.wv.map(x=>x[2]),backgroundColor:'#2f855a'}]},options:{plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+money(c.parsed.y)}}},scales:{y:{ticks:{callback:money}}}}});
+</script>
+</div></body></html>

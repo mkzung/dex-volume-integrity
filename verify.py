@@ -88,6 +88,14 @@ for name, c in controls.items():
     check(0 < c["top10_share"] < 0.5, f'{name}: control top10 {c["top10_share"]} not organic (<0.5)')
     print(f'  {name:18} top1={c["top1_share"]*100:.1f}% top10={c["top10_share"]*100:.1f}% (organic)')
 
+print("== ULTIMA relay evidence (funding cadence) ==")
+relay = jload("ultima_relay.json")
+check(0.050 <= relay["amount_min"] <= relay["amount_max"] <= 0.053, f'relay amounts {relay["amount_min"]}-{relay["amount_max"]} not ~0.052 BNB')
+check(5 <= relay["median_gap_min"] <= 12, f'relay median gap {relay["median_gap_min"]} not ~8 min')
+check(relay["monotonic_decreasing"] is True, "relay amounts not monotonic decreasing")
+check(isinstance(relay["funder"], str), "relay should have a single funder")
+print(f'  {relay["n_hops"]} hops from one funder, {relay["amount_min"]}-{relay["amount_max"]} BNB, {relay["median_gap_min"]} min gap, decreasing')
+
 print("== exclusion gate 1: phantom volume ==")
 for e in report["excluded_uncorroborated"]:
     check(e["ds_daily"] < CORROBORATION_MIN and e["gt_daily"] > e["ds_daily"], f'{e["name"]}: phantom check')
@@ -139,7 +147,26 @@ if os.path.exists(ppath):
     for cn in ["WETH/USDC", "USDT/WBNB"]:
         check(cn in txt, f"post missing control pool {cn}")
     check("buysellratio" in txt, "post missing DN metric-mapping")
-    print("  post ties: on-chain total, screen counts, per-pool on-chain $, exclusions, phantom, turnover, MM framing")
+    check(f'{int(round(netinv["SOSO"]["fleet_holdings_usd"])):,}' in txt, "post missing SOSO holdings")
+    check(str(int(round(netinv["ULTIMA"]["fleet_holdings_usd"]))) in txt, "post missing ULTIMA holdings")
+    psum = sum(e["gt_daily"] for e in report["excluded_uncorroborated"])
+    check(abs(psum/1e6 - 430) < 15 and "430 million" in txt, "post 430M phantom-sum mismatch")
+    for c in controls.values():
+        check(str(round(c["top10_share"]*100)) in txt, "post missing a control top-10 percentage")
+    check("seven" in txt, "post missing control turnover (~7x)")
+    check("0.052" in txt, "post missing relay hop amount")
+    print("  post ties: total, counts, per-pool $, exclusions, phantom+sum, controls, inventory, relay")
+
+print("== dashboard (generated from the same data) ==")
+dpath = os.path.join(HERE, "index.html")
+if os.path.exists(dpath):
+    dtxt = open(dpath).read()
+    check(f'${report["total_confirmed_onchain_per_day"]/1e6:.2f}M' in dtxt, "dashboard missing headline total")
+    for c in report["confirmed_onchain"]:
+        check(f'{c["fleet_usd_24h"]:,}' in dtxt, f'dashboard missing {tok(c["name"])} figure')
+    print("  index.html headline + per-pool numbers match report.json")
+else:
+    check(False, "index.html dashboard missing")
 
 if "--live" in sys.argv:
     print("== live DexScreener re-check ==")

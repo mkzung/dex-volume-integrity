@@ -1,0 +1,51 @@
+{
+ "wallet": "0x0efcd1f41d44fe68f7f83355cf041e705d4fa99d",
+ "funder": "0xc2370231165197feb1908a5efde1b85a97fe79bb",
+ "n_hops": 8,
+ "amount_min": 0.05066,
+ "amount_max": 0.05219,
+ "median_gap_min": 8.1,
+ "monotonic_decreasing": true,
+ "hops": [
+  {
+   "time": "2026-06-30T02:11:16Z",
+   "amount": 0.0521926788777557,
+   "sender": "0xc2370231165197feb1908a5efde1b85a97fe79bb"
+  },
+  {
+   "time": "2026-06-30T02:19:18Z",
+   "amount": 0.0519743405477557,
+   "sender": "0xc2370231165197feb1908a5efde1b85a97fe79bb"
+  },
+  {
+   "time": "2026-06-30T02:27:23Z",
+   "amount": 0.0517560022177557,
+   "sender": "0xc2370231165197feb1908a5efde1b85a97fe79bb"
+  },
+  {
+   "time": "2026-06-30T02:35:24Z",
+   "amount": 0.0515376647277557,
+   "sender": "0xc2370231165197feb1908a5efde1b85a97fe79bb"
+  },
+  {
+   "time": "2026-06-30T02:43:30Z",
+   "amount": 0.0513193263977557,
+   "sender": "0xc2370231165197feb1908a5efde1b85a97fe79bb"
+  },
+  {
+   "time": "2026-06-30T02:51:39Z",
+   "amount": 0.0511009880677557,
+   "sender": "0xc2370231165197feb1908a5efde1b85a97fe79bb"
+  },
+  {
+   "time": "2026-06-30T02:59:43Z",
+   "amount": 0.0508826497377557,
+   "sender": "0xc2370231165197feb1908a5efde1b85a97fe79bb"
+  },
+  {
+   "time": "2026-06-30T03:07:53Z",
+   "amount": 0.0506643114077557,
+   "sender": "0xc2370231165197feb1908a5efde1b85a97fe79bb"
+  }
+ ]
+}

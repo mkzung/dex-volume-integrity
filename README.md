@@ -66,8 +66,11 @@ then `onchain_fullday.py`/`helius_pyth.py`, then `finalize_report.py`):
 python3 runner.py; python3 eoa_check.py; python3 aggregate.py
 python3 snapshot.py; python3 recheck_live.py; python3 net_inventory.py; python3 sample_windows.py; python3 control_measure.py
 python3 onchain_fullday.py; python3 helius_pyth.py; python3 finalize_report.py
-python3 attribution.py
+python3 attribution.py; python3 ultima_relay.py; python3 build_dashboard.py
 ```
+
+The dashboard (`index.html`) is generated from the committed data by `build_dashboard.py`, so it
+cannot drift from the post; serve it via GitHub Pages (main / root).
 
 ## Layout
 
@@ -82,10 +85,13 @@ control_measure.py   liquid control pools, same on-chain measure (top-trader con
 sample_windows.py    multi-window fleet-share robustness
 finalize_report.py   assemble report.json from the on-chain measurements
 attribution.py       funding-graph tracer (relay/peel chains, hubs, reuse)
+ultima_relay.py      capture the ULTIMA relay funding cadence as evidence
+build_dashboard.py   generate index.html from committed data (same numbers verify asserts)
 verify.py            re-derive and assert every published number (CI entry point)
+index.html           self-contained dashboard (serve via GitHub Pages, main / root)
 data/                pools/scores/flagged_detail jsonl; screen.json (aggregate) ->
                      report.json (finalize, on-chain headline); eoa_check, onchain_fullday,
-                     pyth_onchain, net_inventory, controls, window_robustness,
+                     pyth_onchain, net_inventory, controls, ultima_relay, window_robustness,
                      dexscreener_snapshot, live_recheck, attribution json
 figures/             published figures
 post/                the market-health post as a page bundle (index.md + figures)
