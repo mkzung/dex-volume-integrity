@@ -157,6 +157,20 @@ if os.path.exists(ppath):
     check("0.052" in txt, "post missing relay hop amount")
     print("  post ties: total, counts, per-pool $, exclusions, phantom+sum, controls, inventory, relay")
 
+print("== README tie-out (docs cannot drift from data) ==")
+rpath = os.path.join(HERE, "README.md")
+if os.path.exists(rpath):
+    rtxt = open(rpath).read()
+    check(f'{report["total_confirmed_onchain_per_day"]:,}' in rtxt, "README missing on-chain total")
+    check(str(report["candidates_screened"]) in rtxt, "README missing screened count")
+    for c in report["confirmed_onchain"]:
+        check(f'${c["fleet_usd_24h"]:,}' in rtxt, f'README missing on-chain $ for {tok(c["name"])}')
+    for t in ("SOSO", "ULTIMA"):
+        check(f'${int(round(netinv[t]["fleet_holdings_usd"])):,}' in rtxt, f'README missing {t} holdings')
+    print("  README ties: total, screened, per-pool $, net-inventory holdings")
+else:
+    check(False, "README.md missing")
+
 print("== dashboard (generated from the same data) ==")
 dpath = os.path.join(HERE, "index.html")
 if os.path.exists(dpath):

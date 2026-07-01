@@ -23,11 +23,11 @@ Three filters do the work, and each one removed something:
 - **Contract fleets:** two pools (DUAL, BASED) are traded by smart contracts (routers /
   a Uniswap v4 pool), not externally-owned wallets, so self-trading cannot be confirmed.
 - **Snapshot artifacts:** the screen's ~300-trade window over-states bursty fleets. The
-  full-day on-chain measurement cut IN six-fold ($2.0M → $0.32M) and **rejected PYTH**
-  entirely (window $0.22M → on-chain $206, 0.1% of the pool).
+  full-day on-chain measurement cut IN six-fold ($2.0M to $0.32M) and **rejected PYTH**
+  entirely (window $0.22M to on-chain $206, 0.1% of the pool).
 
 Supporting evidence: the fleets hold almost no inventory versus what they trade (IN $0,
-SOSO $2,546 = 0.12%, ULTIMA $376 = 0.03% of daily volume): they cycle funds, not make
+SOSO $2,531 = 0.12%, ULTIMA $377 = 0.03% of daily volume): they cycle funds, not make
 markets. Against liquid controls measured the same way (WETH/USDC on Base, USDT/WBNB on
 BNB Chain), the top-10 traders hold only 26-28% of volume, versus 42% (ULTIMA) and 98.9%
 (SOSO) for the flagged fleets: concentration, not turnover, is the discriminator (liquid
