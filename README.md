@@ -9,6 +9,8 @@ Base and BNB Chain. Companion code and data for the market-health post
 Of 73 screened high-turnover, low-cap pools, 10 flag on wash-trading mechanics and 9 are
 sustained. Three clear all three filters, and their fabricated volume, **measured directly
 on-chain over 24 hours**, totals **2,845,587 dollars per day** (as of 2026-07-01).
+A live recheck on 2026-07-04 found the same fleets still trading all three pools
+(`data/live_recheck_2026-07-04.json`).
 
 | Pool | Chain | EOA fleet | On-chain fabricated / day | Fleet share of pool (24h) |
 |------|-------|:---:|--:|:---:|
