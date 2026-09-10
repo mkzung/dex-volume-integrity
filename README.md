@@ -24,7 +24,7 @@ Three filters do the work, and each one removed something:
   GeckoTerminal and **zero** on an independent source.
 - **Contract fleets:** two pools (DUAL, BASED) are traded by smart contracts (routers /
   a Uniswap v4 pool), not externally-owned wallets, so self-trading cannot be confirmed.
-- **Snapshot artifacts:** the screen's ~300-trade window over-states bursty fleets. The
+- **Snapshot effects:** the screen's ~300-trade window over-states bursty fleets. The
   full-day on-chain measurement cut IN six-fold ($2.0M to $0.32M) and **rejected PYTH**
   entirely (window $0.22M to on-chain $206, 0.1% of the pool).
 
@@ -103,7 +103,7 @@ post/                the market-health post as a page bundle (index.md + figures
 ## Data provenance
 
 `data/report.json` (built by `finalize_report.py`) holds the on-chain headline plus the screen
-funnel and the phantom / contract / window-artifact exclusions. `data/onchain_fullday.json` and
+funnel and the phantom, contract and window exclusions. `data/onchain_fullday.json` and
 `data/pyth_onchain.json` are the direct on-chain measurements; `data/net_inventory.json` and
 `data/window_robustness.json` the supporting checks. DexScreener/trade-tape snapshots are dated;
 small run-to-run differences reflect the rolling 24-hour window and do not change conclusions.
